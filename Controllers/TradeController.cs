@@ -1,5 +1,4 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using StocksAppWithConfiguration.Interfaces;
 using StocksAppWithConfiguration.Models;
@@ -12,9 +11,7 @@ namespace StocksAppWithConfiguration.Controllers
 		private readonly TradingOptions _tradingOptions;
 		private readonly IFinnhubService _finnhubService;
 
-		public TradeController(
-			IOptions<TradingOptions> tradingOptions,
-			IFinnhubService finnhubService)
+		public TradeController(IOptions<TradingOptions> tradingOptions, IFinnhubService finnhubService)
 		{
 			_tradingOptions = tradingOptions.Value;
 			_finnhubService = finnhubService;
@@ -27,21 +24,31 @@ namespace StocksAppWithConfiguration.Controllers
 			try
 			{
 				string defaultStockSymbol = _tradingOptions.DefaultStockSymbol
-					?? throw new Exception("Default Stock Code not found in configuration.");
+					?? throw new Exception("Default Stock Symbol not found in configuration.");
 
-				Dictionary<string, object>? apiStockPriceQuoteResponse = await _finnhubService.GetStockPriceQuote(defaultStockSymbol)
-					?? throw new BadHttpRequestException("No valid response received from Finnhub external API.");
+				Dictionary<string, object> stockQuote = await _finnhubService.GetStockPriceQuote(defaultStockSymbol)
+					?? throw new Exception("Failed to retrieve stockQuote from finnhubService.");
 
-				Dictionary<string, object>? apiCompanyProfileResponse = await _finnhubService.GetCompanyProfile(defaultStockSymbol)
-					?? throw new BadHttpRequestException("No valid response received from Finnhub external API.");
+				Dictionary<string, object> companyProfile = await _finnhubService.GetCompanyProfile(defaultStockSymbol)
+					?? throw new Exception("Failed to retrieve companyProfile from finnhubService.");
+
+				string stockSymbol = companyProfile.GetValueOrDefault("ticker")?.ToString() ?? "Unknown";
+				string stockName = companyProfile.GetValueOrDefault("name")?.ToString() ?? "Unknown";
+				int quantity = companyProfile.TryGetValue("shareOutstanding", out var quantityValue)
+					? (int)Convert.ToDouble(quantityValue.ToString())
+					: 0;
+				double price = stockQuote.TryGetValue("c", out var priceValue) 
+					? Convert.ToDouble(priceValue.ToString()) 
+					: 0;
 
 				var stockTradeViewModel = new StockTradeViewModel()
 				{
-					StockSymbol = apiCompanyProfileResponse.GetValueOrDefault("ticker").ToString(),
-					StockName = apiCompanyProfileResponse.GetValueOrDefault("name").ToString(),
-					Price = double.Parse(apiStockPriceQuoteResponse.GetValueOrDefault("c").ToString()),
-					Quantity = (int)double.Parse(apiCompanyProfileResponse.GetValueOrDefault("marketCapitalization").ToString())
+					StockSymbol = stockSymbol,
+					StockName = stockName,
+					Price = price,
+					Quantity = quantity
 				};
+
 				return View(stockTradeViewModel);
 			}
 			catch (Exception ex)
