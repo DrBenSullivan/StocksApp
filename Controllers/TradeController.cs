@@ -2,7 +2,7 @@
 
 namespace StocksAppWithConfiguration.Controllers
 {
-	public class HomeController : Controller
+	public class TradeController : Controller
 	{
 		[Route("/")]
 		public IActionResult Index()
