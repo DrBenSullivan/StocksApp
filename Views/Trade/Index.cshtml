@@ -1,2 +1,8 @@
-﻿<p>Hello World!</p>
-<p>Default stock symbol: @ViewBag.StockSymbol</p>
+﻿@using StocksAppWithConfiguration.Models.ViewModels;
+@model StockTradeViewModel;
+
+<p>Hello World!</p>
+<p>@Model.StockName</p>
+<p>@Model.StockSymbol</p>
+<p>@Model.Price</p>
+<p>@Model.Quantity</p>

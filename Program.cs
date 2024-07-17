@@ -4,6 +4,7 @@ using StocksAppWithConfiguration.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient();
 builder.Services.AddScoped<IFinnhubService, FinnhubService>();
 builder.Services.Configure<TradingOptions>(
 	builder.Configuration.GetSection("TradingOptions")

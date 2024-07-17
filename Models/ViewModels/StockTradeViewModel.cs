@@ -2,9 +2,9 @@
 {
     public class StockTradeViewModel
     {
-        string? StockSymbol { get; set; }
-        string? StockName { get; set; }
-        double Price { get; set; }
-        int Quantity { get; set; }
+        public string? StockSymbol { get; set; }
+        public string? StockName { get; set; }
+        public double Price { get; set; }
+        public int Quantity { get; set; }
     }
 }

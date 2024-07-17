@@ -1,7 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Security.Cryptography.X509Certificates;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using StocksAppWithConfiguration.Interfaces;
 using StocksAppWithConfiguration.Models;
+using StocksAppWithConfiguration.Models.ViewModels;
 
 namespace StocksAppWithConfiguration.Controllers
 {
@@ -20,9 +22,33 @@ namespace StocksAppWithConfiguration.Controllers
 
 		[Route("/")]
 		[Route("/Trade/Index")]
-		public IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
-			return View();
+			try
+			{
+				string defaultStockSymbol = _tradingOptions.DefaultStockSymbol
+					?? throw new Exception("Default Stock Code not found in configuration.");
+
+				Dictionary<string, object>? apiStockPriceQuoteResponse = await _finnhubService.GetStockPriceQuote(defaultStockSymbol)
+					?? throw new BadHttpRequestException("No valid response received from Finnhub external API.");
+
+				Dictionary<string, object>? apiCompanyProfileResponse = await _finnhubService.GetCompanyProfile(defaultStockSymbol)
+					?? throw new BadHttpRequestException("No valid response received from Finnhub external API.");
+
+				var stockTradeViewModel = new StockTradeViewModel()
+				{
+					StockSymbol = apiCompanyProfileResponse.GetValueOrDefault("ticker").ToString(),
+					StockName = apiCompanyProfileResponse.GetValueOrDefault("name").ToString(),
+					Price = double.Parse(apiStockPriceQuoteResponse.GetValueOrDefault("c").ToString()),
+					Quantity = (int)double.Parse(apiCompanyProfileResponse.GetValueOrDefault("marketCapitalization").ToString())
+				};
+				return View(stockTradeViewModel);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.Message);
+				return View(null);
+			}
 		}
 	}
 }
