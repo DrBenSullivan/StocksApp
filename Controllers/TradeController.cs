@@ -10,11 +10,13 @@ namespace StocksAppWithConfiguration.Controllers
 	{
 		private readonly TradingOptions _tradingOptions;
 		private readonly IFinnhubService _finnhubService;
+		private readonly IConfiguration _configuration;
 
-		public TradeController(IOptions<TradingOptions> tradingOptions, IFinnhubService finnhubService)
+		public TradeController(IOptions<TradingOptions> tradingOptions, IFinnhubService finnhubService, IConfiguration configuration)
 		{
 			_tradingOptions = tradingOptions.Value;
 			_finnhubService = finnhubService;
+			_configuration = configuration;
 		}
 
 		[Route("/")]
@@ -49,6 +51,7 @@ namespace StocksAppWithConfiguration.Controllers
 					Quantity = quantity
 				};
 
+				ViewBag.FinnhubAPIKey = _configuration["FinnhubAPIKey"];
 				return View(stockTradeViewModel);
 			}
 			catch (Exception ex)

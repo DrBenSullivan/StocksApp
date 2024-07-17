@@ -1,8 +1,18 @@
-﻿@using StocksAppWithConfiguration.Models.ViewModels;
-@model StockTradeViewModel;
+﻿@model StockTradeViewModel
+@{
+	ViewBag.Title = Model.StockName;
+	
+}
 
-<p>Hello World!</p>
-<p>@Model.StockName</p>
-<p>@Model.StockSymbol</p>
-<p>@Model.Price</p>
-<p>@Model.Quantity</p>
+<div class="box trading-panel">
+	<h1 class="stock-title">@Model.StockName (@Model.StockSymbol)</h1>
+	<h1 class="stock-price">
+		<span class="text-grey">$</span>@Model.Price
+	</h1>
+</div>
+<p>Test paragraph. Is script working? <span id="testSpan">NO!!!</span></p>
+
+@* I recognise this is not a safe way of passing sensitive data but this is stipulated in the assignment brief *@
+<input type="hidden" id="FinnHubAPIKey" value="@ViewBag.FinnHubAPIKey" />
+
+<script src="~/Scripts/FinnhubWebsocketScript.js" />
