@@ -5,14 +5,14 @@
 }
 
 <div class="box trading-panel">
-	<h1 class="stock-title">@Model.StockName (@Model.StockSymbol)</h1>
-	<h1 class="stock-price">
-		<span class="text-grey">$</span>@Model.Price
+	<h1 class="stock-title">@Model.StockName (<span id="stock-symbol">@Model.StockSymbol</span>)</h1>
+	<h1>
+		<span class="text-grey">$</span><span id="stock-price">@Model.Price</span>
 	</h1>
 </div>
-<p>Test paragraph. Is script working? <span id="testSpan">NO!!!</span></p>
 
-@* I recognise this is not a safe way of passing sensitive data but this is stipulated in the assignment brief *@
-<input type="hidden" id="FinnHubAPIKey" value="@ViewBag.FinnHubAPIKey" />
+@*	I recognise that this is an unsafe method of passing sensitive data but it is stipulated in the assignment brief.
+	In practice I would AJAX for the data to be sent by the backend.*@
+<input type="hidden" id="finnhub-api-key" value="@ViewBag.FinnHubAPIKey" />
 
 <script src="~/Scripts/FinnhubWebsocketScript.js" />
