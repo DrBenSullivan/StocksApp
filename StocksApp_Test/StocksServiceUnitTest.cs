@@ -292,4 +292,20 @@ namespace StocksAppTests
 	}
 
 	#endregion
+
+	#region StocksService.GetBuyOrders()
+	public class StocksService_GetBuyOrders_UnitTest
+	{
+		// By default, method should return an empty list of BuyOrders.
+		[Fact]
+		public async Task GetBuyOrders_ReturnsEmptyListAsDefault()
+		{
+			IStocksService stocksService = new StocksService();
+			List<BuyOrderResponse> outputBuyOrderResponseList = await stocksService.GetBuyOrders();
+			Assert.Empty(outputBuyOrderResponseList);
+		}
+
+		// When you first add few buy orders using CreateBuyOrder() method; and then invoke GetAllBuyOrders() method; the returned list should contain all the same buy orders.
+	}
+	#endregion
 }
