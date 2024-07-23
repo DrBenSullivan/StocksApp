@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using StocksAppWithConfiguration.Models.CustomValidations;
+using StocksApplication.Models.CustomValidations;
 
-namespace StocksAppWithConfiguration.Models.DTOs
+namespace StocksApplication.Models.DTOs
 {
 	public class SellOrderRequest
 	{

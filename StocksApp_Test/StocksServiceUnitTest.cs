@@ -1,12 +1,6 @@
-using System.Runtime.ConstrainedExecution;
-using System;
-using StocksAppWithConfiguration.Interfaces;
-using StocksAppWithConfiguration.Models.DTOs;
-using StocksAppWithConfiguration.Services;
-using Xunit;
-using static System.Runtime.InteropServices.JavaScript.JSType;
-using StocksAppWithConfiguration.Models;
-using Xunit.Sdk;
+using StocksApplication.Models.DTOs;
+using StocksApplication.Services;
+using StocksApplication.Interfaces;
 
 namespace StocksAppTests
 {

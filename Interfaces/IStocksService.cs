@@ -1,6 +1,6 @@
-﻿using StocksAppWithConfiguration.Models.DTOs;
+﻿using StocksApplication.Models.DTOs;
 
-namespace StocksAppWithConfiguration.Interfaces
+namespace StocksApplication.Interfaces
 {
 	public interface IStocksService
 	{

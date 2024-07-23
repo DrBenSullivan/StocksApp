@@ -1,7 +1,7 @@
-﻿using StocksAppWithConfiguration.Interfaces;
-using StocksAppWithConfiguration.Models.DTOs;
+﻿using StocksApplication.Interfaces;
+using StocksApplication.Models.DTOs;
 
-namespace StocksAppWithConfiguration.Services
+namespace StocksApplication.Services
 {
 	public class StocksService : IStocksService
 	{

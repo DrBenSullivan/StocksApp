@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using StocksAppWithConfiguration.Interfaces;
-using StocksAppWithConfiguration.Models;
-using StocksAppWithConfiguration.Models.ViewModels;
+using StocksApplication.Interfaces;
+using StocksApplication.Models;
+using StocksApplication.Models.ViewModels;
 
-namespace StocksAppWithConfiguration.Controllers
+namespace StocksApplication.Controllers
 {
 	public class TradeController : Controller
 	{

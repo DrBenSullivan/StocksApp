@@ -1,4 +1,4 @@
-﻿namespace StocksAppWithConfiguration.Interfaces
+﻿namespace StocksApplication.Interfaces
 {
 	public interface IFinnhubService
 	{

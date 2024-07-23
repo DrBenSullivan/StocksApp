@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace StocksAppWithConfiguration.Models
+namespace StocksApplication.Models
 {
 	public class SellOrder
 	{
