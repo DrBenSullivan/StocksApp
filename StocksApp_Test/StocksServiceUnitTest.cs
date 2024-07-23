@@ -163,7 +163,23 @@ namespace StocksAppTests
 			await Assert.ThrowsAsync<ArgumentNullException>(() => stocksService.CreateSellOrder(null));
 		}
 
-// When you supply sellOrderQuantity as 0 (as per the specification, minimum is 1), it should throw ArgumentException.
+		// When a sellOrder request with Quantity = 0 (specified range 1-100000) passed as paramter to CreateSellOrder, throw ArgumentException.
+		[Fact]
+		public async Task CreateSellOrder_SellOrderRequest_QuantityNull_ThrowsArgumentException()
+		{
+			IStocksService stocksService = new StocksService();
+			SellOrderRequest testSellOrderRequest = new SellOrderRequest()
+			{
+				StockSymbol = "TEST",
+				StockName = "Test",
+				DateAndTimeOfOrder = DateTime.Now,
+				Quantity = 0,
+				Price = 1
+			};
+
+			await Assert.ThrowsAsync<ArgumentException>(() => stocksService.CreateSellOrder(testSellOrderRequest));
+		}
+
 // When you supply sellOrderQuantity as 100001 (as per the specification, maximum is 100000), it should throw ArgumentException.
 // When you supply sellOrderPrice as 0 (as per the specification, minimum is 1), it should throw ArgumentException
 // When you supply sellOrderPrice as 10001 (as per the specification, maximum is 10000), it should throw ArgumentException
