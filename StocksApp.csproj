@@ -7,4 +7,11 @@
     <UserSecretsId>a5c02476-9a4b-4e82-b2c9-0f545b5e4ff4</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="StocksApp_Test\**" />
+    <Content Remove="StocksApp_Test\**" />
+    <EmbeddedResource Remove="StocksApp_Test\**" />
+    <None Remove="StocksApp_Test\**" />
+  </ItemGroup>
+
 </Project>
