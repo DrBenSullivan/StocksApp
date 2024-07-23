@@ -7,6 +7,8 @@ namespace StocksAppWithConfiguration.Models.CustomValidations
 		private readonly DateTime _minDate = new DateTime(2000, 1, 1);
 		private readonly DateTime _maxDate = DateTime.Now;
 
+		public DateRangeAttribute() { }
+
 		protected override ValidationResult? IsValid(object? value, ValidationContext context)
 		{
 			if (value != null || value is not DateTime dateTime) return new ValidationResult("A valid date must be provided.");

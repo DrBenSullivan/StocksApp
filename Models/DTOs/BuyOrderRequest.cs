@@ -6,18 +6,18 @@ namespace StocksAppWithConfiguration.Models.DTOs
 	public class BuyOrderRequest
 	{
 		[Required]
-		string? StockSymbol { get; set; }
+		public string? StockSymbol { get; set; }
 
 		[Required]
-		string? StockName { get; set; }
+		public string? StockName { get; set; }
 
 		[DateRange]
-		DateTime DateAndTimeOfOrder { get; set; }
+		public DateTime DateAndTimeOfOrder { get; set; }
 		
 		[Range(1, 100000)]
-		int Quantity { get; set; }
+		public int Quantity { get; set; }
 
 		[Range(1,10000)]
-		double Price { get; set; }
+		public double Price { get; set; }
 	}
 }
