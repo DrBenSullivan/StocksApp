@@ -361,4 +361,76 @@ namespace StocksAppTests
 		}
 	}
 	#endregion
+
+	#region StocksService.GetSellOrders()
+	public class StocksService_GetSellOrders_UnitTest
+	{
+		private readonly IStocksService _stocksService;
+
+		public StocksService_GetSellOrders_UnitTest()
+		{
+			_stocksService = new StocksService();
+		}
+
+		// By default, GetSellOrders should return an empty list of SellOrders.
+		[Fact]
+		public async Task GetSellOrders_ReturnsEmptyListAsDefault()
+		{
+			List<SellOrderResponse> outputSellOrderResponseList = await _stocksService.GetSellOrders();
+			Assert.Empty(outputSellOrderResponseList);
+		}
+
+		// After adding sell orders using the CreateSellOrder() method, GetSellOrders should return a list containing the same sell orders.
+		[Fact]
+		public async Task GetSellOrders_ReturnsCorrectListOfSellOrdersAfterAddingThem()
+		{
+			SellOrderRequest testSellOrderRequest_1 = new SellOrderRequest()
+			{
+				StockSymbol = "TEST1",
+				StockName = "Test1",
+				DateAndTimeOfOrder = new DateTime(2001, 1, 1),
+				Quantity = 1,
+				Price = 1
+			};
+
+			SellOrderRequest testSellOrderRequest_2 = new SellOrderRequest()
+			{
+				StockSymbol = "TEST2",
+				StockName = "Test2",
+				DateAndTimeOfOrder = new DateTime(2002, 2, 2),
+				Quantity = 1,
+				Price = 1
+			};
+
+			SellOrderRequest testSellOrderRequest_3 = new SellOrderRequest()
+			{
+				StockSymbol = "TEST3",
+				StockName = "Test3",
+				DateAndTimeOfOrder = new DateTime(2003, 3, 3),
+				Quantity = 1,
+				Price = 1
+			};
+
+			List<SellOrderRequest> testSellOrderRequestList = new List<SellOrderRequest>()
+			{
+				testSellOrderRequest_1, testSellOrderRequest_2, testSellOrderRequest_3
+			};
+
+			List<SellOrderResponse> outputSellOrderResponseList = new List<SellOrderResponse>();
+
+			foreach (SellOrderRequest request in testSellOrderRequestList)
+			{
+				SellOrderResponse response = await _stocksService.CreateSellOrder(request);
+				outputSellOrderResponseList.Add(response);
+			}
+
+			List<SellOrderResponse> sellOrderResponseListFromGet = await _stocksService.GetSellOrders();
+
+			foreach (SellOrderResponse sellOrderFromGet in sellOrderResponseListFromGet)
+			{
+				Assert.Contains(sellOrderFromGet, outputSellOrderResponseList);
+			}
+		}
+	}
+	#endregion
 }
