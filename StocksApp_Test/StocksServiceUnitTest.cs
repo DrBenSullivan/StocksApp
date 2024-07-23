@@ -110,7 +110,7 @@ namespace StocksAppTests
 
 		// When you supply dateAndTimeOfOrder as "1999-12-31" (YYYY-MM-DD) - (as per the specification, it should be equal or newer date than 2000-01-01), it should throw ArgumentException.
 		[Fact]
-		public async Task CreateBuyOrder_BuyOrderRequest_DateAndTimeOfOrderYearLessThan2000_ThrowsArgumentException()
+		public async Task CreateBuyOrder_BuyOrderRequest_DateAndTimeOfOrderBefore2000_ThrowsArgumentException()
 		{
 			IStocksService stocksService = new StocksService();
 			BuyOrderRequest testBuyOrderRequest = new BuyOrderRequest()
@@ -248,7 +248,22 @@ namespace StocksAppTests
 			await Assert.ThrowsAsync<ArgumentException>(() => stocksService.CreateSellOrder(testSellOrderRequest));
 		}
 
-		// When you supply dateAndTimeOfOrder as "1999-12-31" (YYYY-MM-DD) - (as per the specification, it should be equal or newer date than 2000-01-01), it should throw ArgumentException.
+		// When a sellOrderRequest with a DateAndTimeOfOrder is before the year 2000, throw ArgumentException.
+		[Fact]
+		public async Task CreateSellOrder_SellOrderRequest_DateAndTimeOfOrderBeforeYear2000_ThrowsArgumentException()
+		{
+			IStocksService stocksService = new StocksService();
+			SellOrderRequest testSellOrderRequest = new SellOrderRequest()
+			{
+				StockSymbol = "TEST",
+				StockName = "Test",
+				DateAndTimeOfOrder = new DateTime(1999,12,31),
+				Quantity = 1,
+				Price = 1
+			};
+
+			await Assert.ThrowsAsync<ArgumentException>(() => stocksService.CreateSellOrder(testSellOrderRequest));
+		}
 		// If you supply all valid values, it should be successful and return an object of SellOrderResponse type with auto-generated SellOrderID(guid).
 	}
 
