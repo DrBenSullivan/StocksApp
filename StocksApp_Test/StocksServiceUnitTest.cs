@@ -127,7 +127,7 @@ namespace StocksAppTests
 
 		// When a proper buyOrderRequest is passed as a parameter to CreateBuyOrder, returns a buyOrderResponse with a valid GUID and equal properties to the request.
 		[Fact]
-		public async Task CreateBuyOrder_ProperBuyOrderRequest_ReturnsBuyOrderResponseWithValidGUID()
+		public async Task CreateBuyOrder_ProperBuyOrderRequest_ReturnsValidBuyOrderResponse()
 		{
 			IStocksService stocksService = new StocksService();
 			BuyOrderRequest testBuyOrderRequest = new BuyOrderRequest()
@@ -264,7 +264,31 @@ namespace StocksAppTests
 
 			await Assert.ThrowsAsync<ArgumentException>(() => stocksService.CreateSellOrder(testSellOrderRequest));
 		}
-		// If you supply all valid values, it should be successful and return an object of SellOrderResponse type with auto-generated SellOrderID(guid).
+
+		// When a proper sellOrderRequest is passed as a parameter to CreateBuyOrder, returns a sellOrderResponse with a valid GUID and equal properties to the request.
+		[Fact]
+		public async Task CreateSellOrder_ProperSellOrderRequest_ReturnsValidSellOrderResponse()
+		{
+			IStocksService stocksService = new StocksService();
+			SellOrderRequest testSellOrderRequest = new SellOrderRequest()
+			{
+				StockSymbol = "TEST",
+				StockName = "Test",
+				DateAndTimeOfOrder = DateTime.Now,
+				Quantity = 1,
+				Price = 1
+			};
+
+			SellOrderResponse outputSellOrderResponse = await stocksService.CreateSellOrder(testSellOrderRequest);
+
+			Assert.True(outputSellOrderResponse.SellOrderID != Guid.Empty &&
+						outputSellOrderResponse.StockSymbol == testSellOrderRequest.StockSymbol &&
+						outputSellOrderResponse.StockName == testSellOrderRequest.StockName &&
+						outputSellOrderResponse.DateAndTimeOfOrder == testSellOrderRequest.DateAndTimeOfOrder &&
+						outputSellOrderResponse.Quantity == testSellOrderRequest.Quantity &&
+						outputSellOrderResponse.Price == testSellOrderRequest.Price &&
+						outputSellOrderResponse.TradeAmount != double.NaN);
+		}
 	}
 
 	#endregion
