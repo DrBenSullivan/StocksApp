@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace StocksApplication.Models.CustomValidations
+namespace StocksApp.Models.CustomValidations
 {
 	public class DateRangeAttribute : ValidationAttribute
 	{

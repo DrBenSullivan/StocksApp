@@ -1,6 +1,6 @@
-using StocksApplication.Models.DTOs;
-using StocksApplication.Services;
-using StocksApplication.Interfaces;
+using StocksApp.Models.DTOs;
+using StocksApp.Services;
+using StocksApp.Interfaces;
 
 namespace StocksAppTests
 {

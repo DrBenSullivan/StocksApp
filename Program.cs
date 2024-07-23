@@ -1,6 +1,6 @@
-using StocksApplication.Interfaces;
-using StocksApplication.Models;
-using StocksApplication.Services;
+using StocksApp.Interfaces;
+using StocksApp.Models;
+using StocksApp.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();

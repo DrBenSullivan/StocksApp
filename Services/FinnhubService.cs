@@ -1,8 +1,8 @@
 ﻿using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
-using StocksApplication.Interfaces;
+using StocksApp.Interfaces;
 
-namespace StocksApplication.Services
+namespace StocksApp.Services
 {
 	public class FinnhubService : IFinnhubService
 	{

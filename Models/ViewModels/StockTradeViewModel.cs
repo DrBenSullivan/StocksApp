@@ -1,4 +1,4 @@
-﻿namespace StocksApplication.Models.ViewModels
+﻿namespace StocksApp.Models.ViewModels
 {
     public class StockTradeViewModel
     {

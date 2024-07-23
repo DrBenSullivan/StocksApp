@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using StocksApplication.Models.CustomValidations;
+using StocksApp.Models.CustomValidations;
 
-namespace StocksApplication.Models.DTOs
+namespace StocksApp.Models.DTOs
 {
 	public class BuyOrderRequest
 	{

@@ -1,4 +1,4 @@
-﻿namespace StocksApplication.Models.DTOs
+﻿namespace StocksApp.Models.DTOs
 {
 	public class SellOrderResponse
 	{
