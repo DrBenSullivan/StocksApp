@@ -35,7 +35,15 @@ namespace StocksApp.Application.Services
 
         public SellOrderResponse CreateSellOrder(SellOrderRequest? sellOrderRequest)
         {
-            throw new NotImplementedException();
+            if (sellOrderRequest == null) throw new ArgumentNullException(nameof(sellOrderRequest));
+
+            ModelValidationHelper.Validate(sellOrderRequest);
+
+            SellOrder sellOrder = _mapper.Map<SellOrder>(sellOrderRequest);
+            sellOrder.SellOrderID = Guid.NewGuid();
+            _sellOrderList.Add(sellOrder);
+            
+            return _mapper.Map<SellOrderResponse>(sellOrder);
         }
 
         public List<BuyOrderResponse> GetBuyOrders()
