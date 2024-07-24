@@ -2,6 +2,9 @@ using StocksApp.Application.Services;
 using StocksApp.Application.Interfaces;
 using StocksApp.Presentation.Models;
 using Xunit.Abstractions;
+using AutoMapper;
+using Microsoft.Extensions.DependencyInjection;
+using StocksApp.Domain.Mapping;
 
 namespace StocksAppTests
 {
@@ -9,10 +12,17 @@ namespace StocksAppTests
     public class StocksService_CreateBuyOrder_UnitTest
 	{
 		private readonly IStocksService _stocksService;
+		private readonly IMapper _mapper;	
 
 		public StocksService_CreateBuyOrder_UnitTest()
 		{
-			_stocksService = new StocksService();
+			var serviceCollection = new ServiceCollection();
+			serviceCollection.AddAutoMapper(typeof(DomainModelToPresentationModelProfile));
+			serviceCollection.AddAutoMapper(typeof(PresentationModelToDomainModelProfile));
+			var serviceProvider = serviceCollection.BuildServiceProvider();
+			_mapper = serviceProvider.GetRequiredService<IMapper>();
+
+			_stocksService = new StocksService(_mapper);
 		}
 
 		// When null passed as parameter to CreateBuyOrder, throw ArgumentNullException.
@@ -146,11 +156,18 @@ namespace StocksAppTests
 	#region StocksService.CreateSellOrder()
 	public class StocksService_CreateSellOrder_UnitTest
 	{
+		private readonly IMapper _mapper;
 		private readonly IStocksService _stocksService;
 
 		public StocksService_CreateSellOrder_UnitTest()
 		{
-			_stocksService = new StocksService();
+			var serviceCollection = new ServiceCollection();
+			serviceCollection.AddAutoMapper(typeof(DomainModelToPresentationModelProfile));
+			serviceCollection.AddAutoMapper(typeof(PresentationModelToDomainModelProfile));
+			var serviceProvider = serviceCollection.BuildServiceProvider();
+			_mapper = serviceProvider.GetRequiredService<IMapper>();
+
+			_stocksService = new StocksService(_mapper);
 		}
 
 		// When null passed as parameter to CreateSellOrder, throw ArgumentNullException.
@@ -285,11 +302,18 @@ namespace StocksAppTests
 	#region StocksService.GetBuyOrders()
 	public class StocksService_GetBuyOrders_UnitTest
 	{
+		private readonly IMapper _mapper;
 		private readonly IStocksService _stocksService;
 
 		public StocksService_GetBuyOrders_UnitTest()
 		{
-			_stocksService = new StocksService();
+			var serviceCollection = new ServiceCollection();
+			serviceCollection.AddAutoMapper(typeof(DomainModelToPresentationModelProfile));
+			serviceCollection.AddAutoMapper(typeof(PresentationModelToDomainModelProfile));
+			var serviceProvider = serviceCollection.BuildServiceProvider();
+			_mapper = serviceProvider.GetRequiredService<IMapper>();
+
+			_stocksService = new StocksService(_mapper);
 		}
 		
 		// By default, GetBuyOrders should return an empty list of BuyOrders.
@@ -357,11 +381,18 @@ namespace StocksAppTests
 	#region StocksService.GetSellOrders()
 	public class StocksService_GetSellOrders_UnitTest
 	{
+		private readonly IMapper _mapper;
 		private readonly IStocksService _stocksService;
 
 		public StocksService_GetSellOrders_UnitTest()
 		{
-			_stocksService = new StocksService();
+			var serviceCollection = new ServiceCollection();
+			serviceCollection.AddAutoMapper(typeof(DomainModelToPresentationModelProfile));
+			serviceCollection.AddAutoMapper(typeof(PresentationModelToDomainModelProfile));
+			var serviceProvider = serviceCollection.BuildServiceProvider();
+			_mapper = serviceProvider.GetRequiredService<IMapper>();
+
+			_stocksService = new StocksService(_mapper);
 		}
 
 		// By default, GetSellOrders should return an empty list of SellOrders.

@@ -12,8 +12,6 @@ namespace StocksApp.Application.Services
         private readonly List<BuyOrder> _buyOrderList;
         private readonly List<SellOrder> _sellOrderList;
 
-        public StocksService() { }
-
         public StocksService(IMapper mapper)
         {
             _mapper = mapper;
