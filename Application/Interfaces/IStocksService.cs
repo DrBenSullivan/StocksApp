@@ -1,4 +1,5 @@
 ﻿using StocksApp.Presentation.Models;
+using StocksApp.Domain.Models;
 
 namespace StocksApp.Application.Interfaces
 {

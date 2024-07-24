@@ -48,7 +48,9 @@ namespace StocksApp.Application.Services
 
         public List<BuyOrderResponse> GetBuyOrders()
         {
-            throw new NotImplementedException();
+            if (_buyOrderList.Count == 0) return new List<BuyOrderResponse>();
+
+            return _buyOrderList.Select(buyOrder => _mapper.Map<BuyOrderResponse>(buyOrder)).ToList();
         }
 
         public List<SellOrderResponse> GetSellOrders()
