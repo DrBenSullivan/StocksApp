@@ -1,2 +1,44 @@
 ﻿@model OrdersViewModel;
+@{
+	ViewBag.Title = "All Orders";
+}
 
+<div class="orders-list">
+	<div id="buy-orders-list">
+		@foreach (var order in Model.BuyOrders)
+		{
+			<h3>
+				@order.StockName
+			</h3>
+			<p>
+				@order.Quantity shares at $ @order.TradeAmount
+			</p>
+			<p>
+				Trade amount: @order.TradeAmount
+			</p>
+			<p>
+				@order.DateAndTimeOfOrder
+			</p>
+			<hr />
+		}
+	</div>
+
+	<div id="sell-orders-list">
+		@foreach (var order in Model.SellOrders)
+		{
+			<h3>
+				@order.StockName
+			</h3>
+			<p>
+				@order.Quantity shares at $ @order.TradeAmount
+			</p>
+			<p>
+				Trade amount: @order.TradeAmount
+			</p>
+			<p>
+				@order.DateAndTimeOfOrder
+			</p>
+			<hr />
+		}
+	</div>
+</div>

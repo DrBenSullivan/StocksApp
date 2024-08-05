@@ -10,20 +10,24 @@ namespace StocksApp.Controllers
 {
     public class TradeController : Controller
     {
-        private readonly TradingOptions _tradingOptions;
+		#region private readonly fields
+		private readonly TradingOptions _tradingOptions;
         private readonly IFinnhubService _finnhubService;
         private readonly IStocksService _stocksService;
         private readonly IConfiguration _configuration;
+		#endregion
 
-        public TradeController(IOptions<TradingOptions> tradingOptions, IFinnhubService finnhubService, IStocksService stocksService, IConfiguration configuration)
+		#region constructors
+		public TradeController(IOptions<TradingOptions> tradingOptions, IFinnhubService finnhubService, IStocksService stocksService, IConfiguration configuration)
         {
             _tradingOptions = tradingOptions.Value;
             _finnhubService = finnhubService;
             _stocksService = stocksService;
             _configuration = configuration;
         }
+		#endregion
 
-        [HttpGet]
+		[HttpGet]
         [Route("/")]
         [Route("/trade/index")]
         public async Task<IActionResult> Index()
@@ -108,6 +112,6 @@ namespace StocksApp.Controllers
             List<SellOrderResponse> sellOrders = _stocksService.GetSellOrders();
             OrdersViewModel viewModel = new OrdersViewModel() { BuyOrders = buyOrders,SellOrders = sellOrders };
             return View(viewModel);
-        }
+        }   
     }
 }

@@ -12,9 +12,9 @@
     box-sizing: border-box;
 }
 
-i
+.logo
 {
-    font-size: 1.9em;
+    font-size: 1.9em;   
 }
 
 .container
@@ -450,10 +450,10 @@ a.link-hover:hover
 }
 
 
-.button-panel
-{
-    margin-top: 20px;
-}
+    .button-panel
+    {
+        margin-top: 20px;
+    }
 
 
 .search-text

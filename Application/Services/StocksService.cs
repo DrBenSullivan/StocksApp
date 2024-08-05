@@ -8,18 +8,28 @@ namespace StocksApp.Application.Services
 {
     public class StocksService : IStocksService
     {
-        private readonly IMapper _mapper;
+		#region private fields
+		private readonly IMapper _mapper;
         private readonly List<BuyOrder> _buyOrderList;
         private readonly List<SellOrder> _sellOrderList;
+		#endregion
 
-        public StocksService(IMapper mapper)
+		#region constructors
+		public StocksService(IMapper mapper)
         {
             _mapper = mapper;
             _buyOrderList = new List<BuyOrder>();
             _sellOrderList = new List<SellOrder>();
         }
+		#endregion
 
-        public BuyOrderResponse CreateBuyOrder(BuyOrderRequest? buyOrderRequest)
+		/// <summary>
+		/// Adds a new BuyOrder.
+		/// </summary>
+		/// <param name="buyOrderRequest">BuyOrder request data to add.</param>
+		/// <returns>Returns the BuyOrder data as a SellOrderResponse DTO.</returns>
+		/// <exception cref="ArgumentNullException"></exception>
+		public BuyOrderResponse CreateBuyOrder(BuyOrderRequest? buyOrderRequest)
         {
             if (buyOrderRequest == null) throw new ArgumentNullException(nameof(buyOrderRequest));
 
@@ -33,6 +43,12 @@ namespace StocksApp.Application.Services
 
         }
 
+        /// <summary>
+        /// Adds a new SellOrder.
+        /// </summary>
+        /// <param name="sellOrderRequest">SellOrder request data to add.</param>
+        /// <returns>Returns the SellOrder data as a SellOrderResponse DTO.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
         public SellOrderResponse CreateSellOrder(SellOrderRequest? sellOrderRequest)
         {
             if (sellOrderRequest == null) throw new ArgumentNullException(nameof(sellOrderRequest));
@@ -46,13 +62,21 @@ namespace StocksApp.Application.Services
             return _mapper.Map<SellOrderResponse>(sellOrder);
         }
 
-        public List<BuyOrderResponse> GetBuyOrders()
+		/// <summary>
+		/// Gets a list of all BuyOrders.
+		/// </summary>
+		/// <returns>Returns the list of BuyOrders as a l        ist of BuyOrderResponse DTOs.</returns>
+		public List<BuyOrderResponse> GetBuyOrders()
         {
             if (_buyOrderList.Count == 0) return new List<BuyOrderResponse>();
 
             return _buyOrderList.Select(buyOrder => _mapper.Map<BuyOrderResponse>(buyOrder)).ToList();
         }
 
+        /// <summary>
+        /// Gets a list of all SellOrders.
+        /// </summary>
+        /// <returns>Returns the list of SellOrders as a list of SellOrderResponse DTOs.</returns>
         public List<SellOrderResponse> GetSellOrders()
         {
             if (_sellOrderList.Count == 0) return new List<SellOrderResponse>();

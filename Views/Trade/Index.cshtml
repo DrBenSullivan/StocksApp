@@ -3,11 +3,29 @@
 	ViewBag.Title = Model.StockName;
 }
 
-<div class="box trading-panel">
-	<h1 class="stock-title">@Model.StockName (<span id="stock-symbol">@Model.StockSymbol</span>)</h1>
-	<h1>
-		<span class="text-grey">$</span><span id="stock-price">@Model.Price</span>
-	</h1>
+<div class="box trading-panel flex">
+
+	<div id="stock-price-panel">
+		<h1 class="stock-title">@Model.StockName (<span id="stock-symbol">@Model.StockSymbol</span>)</h1>
+		<h1>
+			<span class="text-grey">$ </span><span id="stock-price">@Model.Price</span>
+		</h1>
+	</div>
+
+	<div id="new-order-panel">
+		<h3>New Order</h3>
+
+		@using (Html.BeginForm())
+		{
+			<div class="form-group">
+				@HtmlLabelFor(M)
+			</div>
+		}
+		<h4 class="text-grey">Quantity</h4>
+		<input type="number" class="w-50" placeholder="Quantity"/><br /><br />
+		<button class="trading-button button-red-back"><i class="fa-solid fa-arrow-up"></i> Sell</button>
+		<button class="trading-button button-green-back"><i class="fa-solid fa-arrow-down"></i> Buy</button>
+	</div>
 </div>
 
 @*	I recognise that this is an unsafe method of passing sensitive data but it is stipulated in the assignment brief.
