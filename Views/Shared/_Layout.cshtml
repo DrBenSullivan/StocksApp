@@ -8,10 +8,24 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="header">
-				<i class="fa-solid fa-money-bill-trend-up"></i><span class="app-title">STOCKS</span>
+		<div class="header navbar">
+			<i class="fa-solid fa-money-bill-trend-up"></i><span class="app-title">STOCKS</span>
+			
+				<ul>
+					<a href="~/">Home</a>
+				</ul>
+				<ul>
+					<a href="~/">Home1</a>
+				</ul>
+				<ul>
+					<a href="~/">Home2</a>
+				</ul>
+			
+		</div>
+		<div class="container">
+			<div class="page-content">
+				@RenderBody()
 			</div>
-			@RenderBody()
 		</div>
 	</body>
 </html>
