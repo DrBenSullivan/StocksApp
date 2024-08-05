@@ -4,7 +4,7 @@ using StocksApp.Application.Interfaces;
 using StocksApp.Domain.Models;
 using StocksApp.Presentation.Models.ViewModels;
 
-namespace StocksApp.Presentation.Controllers
+namespace StocksApp.Controllers
 {
     public class TradeController : Controller
     {
@@ -34,8 +34,14 @@ namespace StocksApp.Presentation.Controllers
                 Dictionary<string, object> companyProfile = await _finnhubService.GetCompanyProfile(defaultStockSymbol)
                     ?? throw new Exception("Failed to retrieve companyProfile from finnhubService.");
 
-                string stockSymbol = companyProfile.GetValueOrDefault("ticker")?.ToString() ?? "Unknown";
-                string stockName = companyProfile.GetValueOrDefault("name")?.ToString() ?? "Unknown";
+                string stockSymbol = companyProfile
+                    .GetValueOrDefault("ticker")?
+                    .ToString()
+                    ?? "Unknown";
+                string stockName = companyProfile
+                    .GetValueOrDefault("name")?
+                    .ToString()
+                    ?? "Unknown";
                 int quantity = companyProfile.TryGetValue("shareOutstanding", out var quantityValue)
                     ? (int)Convert.ToDouble(quantityValue.ToString())
                     : 0;
