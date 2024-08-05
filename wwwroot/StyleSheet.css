@@ -12,6 +12,11 @@
     box-sizing: border-box;
 }
 
+i
+{
+    font-size: 1.9em;
+}
+
 .container
 {
     min-width: 500px;
@@ -21,7 +26,6 @@
 {
     font-size: 1.9em;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-    margin-left: 20px;
 }
 
 .login-button
@@ -29,54 +33,30 @@
     margin-right: 16px;
 }
 
-.navbar
-{
-    padding: 10px;
-}
-
-.navbar > ul
+.header > ul
 {
     list-style-type: none;
-    width: 100%;
+    display: inline-block;
+    padding: 0.45em;
+    width: auto;
 }
 
-.navbar > ul > li
-{
-    width: 100%;
-}
-
-
-.navbar > ul > li > a:link, .navbar > ul > li > a:visited
+.header > ul > li > a:link, .header > ul > li > a:visited
 {
     padding: 4px 8px;
     cursor: pointer;
     transition: background-color 0.4s;
     display: inline-block;
     margin: 0px 3px;
-    color: #0e5eba;
+    color: #aaaaaa;
     text-decoration: none;
+    width: auto;
 }
 
-.navbar > ul > li > a:hover
+.header > ul > li > a:hover
 {
     background-color: #ffffff;
     color: #086581;
-}
-
-.nav-active:before
-{
-    content: "";
-    position: absolute;
-    left: 15px;
-    bottom: -2px;
-    height: 1px;
-    width: 50%; /* or 100px */
-    border-bottom: 2px solid #626262;
-}
-
-.nav-active
-{
-    position: relative;
 }
 
 .page-content
@@ -324,7 +304,7 @@
     background-color: #055c87;
     color: #ffffff;
     padding: 20px;
-    
+    width: 100%;
 }
 
 .border-bottom
@@ -608,7 +588,7 @@ a.link-hover:hover
 }
 
 
-@media screen and (min-width: 1000px)
+@media screen and (min-width: 600px)
 {
     #top-bar-div
     {
@@ -620,13 +600,13 @@ a.link-hover:hover
         text-align: right;
     }
 
-    .navbar > ul
+    .header > ul
     {
         display: inline-block;
         width: auto;
     }
 
-    .navbar > ul > li
+    .header > ul > li
     {
         display: inline-block;
         width: auto;
