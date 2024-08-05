@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Options;
 using StocksApp.Application.Interfaces;
 using StocksApp.Domain.Models;
+using StocksApp.Presentation.Models;
 using StocksApp.Presentation.Models.ViewModels;
 
 namespace StocksApp.Controllers
@@ -10,17 +12,20 @@ namespace StocksApp.Controllers
     {
         private readonly TradingOptions _tradingOptions;
         private readonly IFinnhubService _finnhubService;
+        private readonly IStocksService _stocksService;
         private readonly IConfiguration _configuration;
 
-        public TradeController(IOptions<TradingOptions> tradingOptions, IFinnhubService finnhubService, IConfiguration configuration)
+        public TradeController(IOptions<TradingOptions> tradingOptions, IFinnhubService finnhubService, IStocksService stocksService, IConfiguration configuration)
         {
             _tradingOptions = tradingOptions.Value;
             _finnhubService = finnhubService;
+            _stocksService = stocksService;
             _configuration = configuration;
         }
 
+        [HttpGet]
         [Route("/")]
-        [Route("/Trade/Index")]
+        [Route("/trade/index")]
         public async Task<IActionResult> Index()
         {
             try
@@ -65,6 +70,44 @@ namespace StocksApp.Controllers
                 Console.WriteLine(ex.Message);
                 return View(null);
             }
+        }
+
+		[HttpPost]
+		[Route("/trade/buyorder")]
+        public IActionResult BuyOrder(BuyOrderRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Orders", "Trade", request);
+            }    
+
+            request.DateAndTimeOfOrder = DateTime.Now;
+            BuyOrderResponse response = _stocksService.CreateBuyOrder(request);
+            return RedirectToAction("Orders", "Trade");
+        }
+
+        [HttpPost]
+        [Route("trade/sellorder")]
+        public IActionResult SellOrder(SellOrderRequest request)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Orders", "Trade", request);
+            }
+
+            request.DateAndTimeOfOrder = DateTime.Now;
+            SellOrderResponse response = _stocksService.CreateSellOrder(request);
+            return RedirectToAction("Orders", "Trade");
+        }
+
+        [HttpGet]
+        [Route("/trade/orders")]
+        public IActionResult Orders()
+        {
+            List<BuyOrderResponse> buyOrders = _stocksService.GetBuyOrders();
+            List<SellOrderResponse> sellOrders = _stocksService.GetSellOrders();
+            OrdersViewModel viewModel = new OrdersViewModel() { BuyOrders = buyOrders,SellOrders = sellOrders };
+            return View(viewModel);
         }
     }
 }
