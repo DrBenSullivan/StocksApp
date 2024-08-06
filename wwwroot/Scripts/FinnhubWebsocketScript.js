@@ -1,7 +1,6 @@
 ﻿$(document).ready(function () {
     const finnhubKey = $('#finnhub-api-key').val();
-    const stockSymbol = $('#stock-symbol').html();
-    const openingPrice = $('#stock-price');
+    const stockSymbol = $('#stock-symbol').text();
     let newPrice;
 
     console.log(`${finnhubKey}\nStock Symbol: ${stockSymbol}`);
@@ -23,12 +22,14 @@
         if (responseObject.error) {
             console.error(`Response error: ${responseObject.msg}`);
             newPrice = responseObject.msg;
-        } else if (responseObject.data && responseObject.data[0].p) {
+        } else if (responseObject.data && responseObject.data[0].p && responseObject.data[0].p != newPrice) {
             console.log(`Valid response: ${responseObject.data[0].p}`);
             newPrice = responseObject.data[0].p.toFixed(2);
         }
 
-        openingPrice.html(newPrice.toString());
+        $('#stock-price').text(newPrice.toString());
+        $('#order-form-price').prop("value", newPrice);
+        
     });
 
     socket.addEventListener('error', function (event) {

@@ -10,7 +10,7 @@ namespace StocksApp.Presentation.Models
         [Required(ErrorMessage = "A StockName was not provided. StockName cannot be null or empty.")]
         public string? StockName { get; set; }
 
-        public DateTime? DateAndTimeOfOrder { get; set; } = DateTime.Now;
+        public DateTime? DateAndTimeOfOrder { get; set; }
 
         [Range(1, 100_000, ErrorMessage = "A valid stock Quantity between 1 - 100,000 was not provided.")]
         public int Quantity { get; set; }

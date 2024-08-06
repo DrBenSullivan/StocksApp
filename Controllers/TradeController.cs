@@ -8,6 +8,7 @@ using StocksApp.Presentation.Models.ViewModels;
 
 namespace StocksApp.Controllers
 {
+    [Route("trade")]
     public class TradeController : Controller
     {
 		#region private readonly fields
@@ -29,9 +30,9 @@ namespace StocksApp.Controllers
 
 		[HttpGet]
         [Route("/")]
-        [Route("/trade/index")]
+        [Route("index")]
         public async Task<IActionResult> Index()
-        {
+		{
             try
             {
                 string defaultStockSymbol = _tradingOptions.DefaultStockSymbol
@@ -77,7 +78,8 @@ namespace StocksApp.Controllers
         }
 
 		[HttpPost]
-		[Route("/trade/buyorder")]
+        [ValidateAntiForgeryToken]
+		[Route("buy-order")]
         public IActionResult BuyOrder(BuyOrderRequest request)
         {
             if (!ModelState.IsValid)
@@ -87,11 +89,12 @@ namespace StocksApp.Controllers
 
             request.DateAndTimeOfOrder = DateTime.Now;
             BuyOrderResponse response = _stocksService.CreateBuyOrder(request);
-            return RedirectToAction("Orders", "Trade");
+            return new RedirectToActionResult("Orders", "Trade", new { });
         }
 
         [HttpPost]
-        [Route("trade/sellorder")]
+        [ValidateAntiForgeryToken]
+        [Route("sell-order")]
         public IActionResult SellOrder(SellOrderRequest request)
         {
             if (!ModelState.IsValid)
@@ -101,11 +104,11 @@ namespace StocksApp.Controllers
 
             request.DateAndTimeOfOrder = DateTime.Now;
             SellOrderResponse response = _stocksService.CreateSellOrder(request);
-            return RedirectToAction("Orders", "Trade");
+            return new RedirectToActionResult("Orders", "Trade", new { });
         }
 
         [HttpGet]
-        [Route("/trade/orders")]
+        [Route("orders")]
         public IActionResult Orders()
         {
             List<BuyOrderResponse> buyOrders = _stocksService.GetBuyOrders();
