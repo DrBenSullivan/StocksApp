@@ -1,10 +1,14 @@
+using Microsoft.AspNetCore.Mvc;
 using StocksApp.Application.Interfaces;
 using StocksApp.Application.Services;
 using StocksApp.Domain.Mapping;
 using StocksApp.Domain.Models;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews(options =>
+{
+	options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+});
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IFinnhubService, FinnhubService>();
 builder.Services.AddSingleton<IStocksService, StocksService>();

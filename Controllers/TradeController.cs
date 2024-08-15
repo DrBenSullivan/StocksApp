@@ -8,7 +8,6 @@ using StocksApp.Presentation.Models.ViewModels;
 
 namespace StocksApp.Controllers
 {
-    [Route("trade")]
     public class TradeController : Controller
     {
 		#region private readonly fields
@@ -30,7 +29,6 @@ namespace StocksApp.Controllers
 
 		[HttpGet]
         [Route("/")]
-        [Route("index")]
         public async Task<IActionResult> Index()
 		{
             try
@@ -78,8 +76,6 @@ namespace StocksApp.Controllers
         }
 
 		[HttpPost]
-        [ValidateAntiForgeryToken]
-		[Route("buy-order")]
         public IActionResult BuyOrder(BuyOrderRequest request)
         {
             if (!ModelState.IsValid)
@@ -93,8 +89,6 @@ namespace StocksApp.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("sell-order")]
         public IActionResult SellOrder(SellOrderRequest request)
         {
             if (!ModelState.IsValid)
@@ -108,7 +102,6 @@ namespace StocksApp.Controllers
         }
 
         [HttpGet]
-        [Route("orders")]
         public IActionResult Orders()
         {
             List<BuyOrderResponse> buyOrders = _stocksService.GetBuyOrders();
