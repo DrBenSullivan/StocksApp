@@ -3,8 +3,6 @@
     const stockSymbol = $('#stock-symbol').text();
     let newPrice;
 
-    console.log(`${finnhubKey}\nStock Symbol: ${stockSymbol}`);
-
     if (!finnhubKey || !stockSymbol) {
         console.error('API key or stock symbol is missing.');
         return;
@@ -23,7 +21,6 @@
             console.error(`Response error: ${responseObject.msg}`);
             newPrice = responseObject.msg;
         } else if (responseObject.data && responseObject.data[0].p && responseObject.data[0].p != newPrice) {
-            console.log(`Valid response: ${responseObject.data[0].p}`);
             newPrice = responseObject.data[0].p.toFixed(2);
         }
 
@@ -36,9 +33,7 @@
         console.error(`Finnhub WebSocket error: ${event}`);
     });
 
-    socket.addEventListener('close', function (event) {
-        console.log('Finnhubb WebSocket is now closed.');
-    });
+    socket.addEventListener('close', function (event));
 
     window.addEventListener('beforeunload', function () {
         if (socket.readyState === WebSocket.OPEN) {

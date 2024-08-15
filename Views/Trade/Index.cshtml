@@ -20,25 +20,26 @@
 		<form method="post">
 			<div class="flex form-field">
 				<div class="w-25">
-					<label for="Quantity" class="mt">Quantity</label>
+					<label asp-for="Quantity" class="mt">Quantity</label>
 				</div>
 				<div class="flex-1">
-					<input asp-for="Quantity" placeholder="Quantity" required="required" class="form-input mb" autofocus="autofocus" />
-					<span asp-validation-for="Quantity" class="text-red"></span>
+					<input asp-for="Quantity" placeholder="Quantity" class="form-input mb" autofocus="autofocus" />
 				</div>
 			</div>
 
 			<div class="button-panel">
 
-				<button type="submit" formaction="~/trade/sell-order" class="trading-button button-red-back">
+				<button type="submit" asp-controller="trade" asp-action="sell-order" class="trading-button button-red-back">
 					<i class="fa-solid fa-arrow-up"></i>
 					<span>Sell</span>
 				</button>
 
-				<button type="submit" formaction="~/trade/buy-order" class="trading-button button-green-back">
+				<button type="submit" asp-controller="trade" asp-action="buy-order" class="trading-button button-green-back">
 					<i class="fa-solid fa-arrow-down"></i>
 					<span>Buy</span>
 				</button>
+
+				<div asp-validation-summary="All" class="text-red"></div>
 
 				@if (ViewBag.Errors != null)
 				{
@@ -54,17 +55,22 @@
 
 			</div>
 
-			<input type="hidden" name="StockSymbol" value="@Model.StockSymbol" />
-			<input type="hidden" name="StockName" value="@Model.StockName" />
-			<input id="order-form-price" type="hidden" name="Price" value="@Model.Price" />
+			<input type="hidden" asp-for="StockSymbol" value="@Model.StockSymbol" />
+			<input type="hidden" asp-for="StockName" value="@Model.StockName" />
+			<input type="hidden" asp-for="Price" value="@Model.Price" id="order-form-price" />
 		</form>
 	</div>
 </div>
 
-@*	I recognise that this is an unsafe method of passing sensitive data but it is stipulated in the assignment brief.
-	In practice I would AJAX for the data to be sent by the backend. *@
-<input type="hidden" id="finnhub-api-key" value="@ViewBag.FinnHubAPIKey" />
-<script src="~/Scripts/FinnhubWebsocketScript.js" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js" integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js" integrity="sha512-o6XqxgrUsKmchwy9G5VRNWSSxTS4Urr4loO6/0hYdpWmFUfHqGzawGxeQGMDqYzxjY9sbktPbNlkIQJWagVZQg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+
+@section Scripts
+{
+	@*	I recognise that this is an unsafe method of passing sensitive data but it is stipulated in the assignment brief. *@
+	@*  In practice I would AJAX for the data to be sent by the backend. *@
+	<input type="hidden" id="finnhub-api-key" value="@ViewBag.FinnHubAPIKey" />
+	<script src="~/Scripts/FinnhubWebsocketScript.js" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js" integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js" integrity="sha512-o6XqxgrUsKmchwy9G5VRNWSSxTS4Urr4loO6/0hYdpWmFUfHqGzawGxeQGMDqYzxjY9sbktPbNlkIQJWagVZQg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+}
