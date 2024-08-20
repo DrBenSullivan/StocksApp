@@ -76,6 +76,7 @@ namespace StocksApp.Controllers
         }
 
 		[HttpPost]
+        [Route("/BuyOrder")]
         public async Task<IActionResult> BuyOrder(BuyOrderRequest request)
         {
             if (!ModelState.IsValid)
@@ -89,6 +90,7 @@ namespace StocksApp.Controllers
         }
 
         [HttpPost]
+        [Route("/SellOrder")]
         public async Task<IActionResult> SellOrder(SellOrderRequest request)
         {
             if (!ModelState.IsValid)
@@ -102,11 +104,12 @@ namespace StocksApp.Controllers
         }
 
         [HttpGet]
+        [Route("/Orders")]
         public async Task<IActionResult> Orders()
         {
             List<BuyOrderResponse> buyOrders = await _stocksService.GetBuyOrders();
             List<SellOrderResponse> sellOrders = await _stocksService.GetSellOrders();
-            OrdersViewModel viewModel = new OrdersViewModel() { BuyOrders = buyOrders,SellOrders = sellOrders };
+            OrdersViewModel viewModel = new OrdersViewModel() { BuyOrders = buyOrders, SellOrders = sellOrders };
             return View(viewModel);
         }   
     }

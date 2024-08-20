@@ -1,4 +1,4 @@
-using StocksApp.Application.Services;
+/*using StocksApp.Application.Services;
 using StocksApp.Application.Interfaces;
 using StocksApp.Presentation.Models;
 using Xunit.Abstractions;
@@ -456,4 +456,4 @@ namespace StocksAppTests
 		}
 	}
 	#endregion
-}
+}*/

@@ -33,7 +33,7 @@
         console.error(`Finnhub WebSocket error: ${event}`);
     });
 
-    socket.addEventListener('close', function (event));
+    socket.addEventListener('close', function (event) { });
 
     window.addEventListener('beforeunload', function () {
         if (socket.readyState === WebSocket.OPEN) {
