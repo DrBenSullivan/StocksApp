@@ -29,7 +29,7 @@ namespace StocksApp.Application.Services
 		/// <param name="buyOrderRequest">BuyOrder request data to add.</param>
 		/// <returns>Returns the BuyOrder data as a SellOrderResponse DTO.</returns>
 		/// <exception cref="ArgumentNullException"></exception>
-		public BuyOrderResponse CreateBuyOrder(BuyOrderRequest? buyOrderRequest)
+		public async Task<BuyOrderResponse> CreateBuyOrder(BuyOrderRequest? buyOrderRequest)
         {
             if (buyOrderRequest == null) throw new ArgumentNullException(nameof(buyOrderRequest));
 
@@ -37,7 +37,8 @@ namespace StocksApp.Application.Services
 
             BuyOrder buyOrder = _mapper.Map<BuyOrder>(buyOrderRequest);
             buyOrder.BuyOrderID = Guid.NewGuid();
-            _buyOrderList.Add(buyOrder);
+            await _ordersDb.AddAsync(buyOrder);
+            await _ordersDb.SaveChangesAsync();
 
             return _mapper.Map<BuyOrderResponse>(buyOrder);
 
