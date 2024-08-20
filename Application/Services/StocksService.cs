@@ -70,9 +70,9 @@ namespace StocksApp.Application.Services
 		/// <returns>Returns the list of BuyOrders as a l        ist of BuyOrderResponse DTOs.</returns>
 		public List<BuyOrderResponse> GetBuyOrders()
         {
-            if (_buyOrderList.Count == 0) return new List<BuyOrderResponse>();
+            if (_ordersDb.BuyOrders.Count() == 0) return new List<BuyOrderResponse>();
 
-            return _buyOrderList.Select(buyOrder => _mapper.Map<BuyOrderResponse>(buyOrder)).ToList();
+            return _ordersDb.BuyOrders.Select(buyOrder => _mapper.Map<BuyOrderResponse>(buyOrder)).ToList();
         }
 
         /// <summary>
