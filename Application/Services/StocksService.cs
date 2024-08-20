@@ -68,22 +68,26 @@ namespace StocksApp.Application.Services
 		/// Gets a list of all BuyOrders.
 		/// </summary>
 		/// <returns>Returns the list of BuyOrders as a l        ist of BuyOrderResponse DTOs.</returns>
-		public List<BuyOrderResponse> GetBuyOrders()
+		public async Task<List<BuyOrderResponse>> GetBuyOrders()
         {
             if (_ordersDb.BuyOrders.Count() == 0) return new List<BuyOrderResponse>();
 
-            return _ordersDb.BuyOrders.Select(buyOrder => _mapper.Map<BuyOrderResponse>(buyOrder)).ToList();
+            return await _ordersDb.BuyOrders
+                .Select(buyOrder => _mapper.Map<BuyOrderResponse>(buyOrder))
+                .ToListAsync();
         }
 
         /// <summary>
         /// Gets a list of all SellOrders.
         /// </summary>
         /// <returns>Returns the list of SellOrders as a list of SellOrderResponse DTOs.</returns>
-        public List<SellOrderResponse> GetSellOrders()
+        public async Task<List<SellOrderResponse>> GetSellOrders()
         {
-            if (_sellOrderList.Count == 0) return new List<SellOrderResponse>();
+            if (_ordersDb.SellOrders.Count() == 0) return new List<SellOrderResponse>();
 
-            return _sellOrderList.Select(sellOrder => _mapper.Map<SellOrderResponse>(sellOrder)).ToList();
+            return await _ordersDb.SellOrders
+                .Select(sellOrder => _mapper.Map<SellOrderResponse>(sellOrder))
+                .ToListAsync();
         }
     }
 }

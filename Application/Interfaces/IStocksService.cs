@@ -5,12 +5,12 @@ namespace StocksApp.Application.Interfaces
 {
     public interface IStocksService
     {
-        BuyOrderResponse CreateBuyOrder(BuyOrderRequest? buyOrderRequest);
+        Task<BuyOrderResponse> CreateBuyOrder(BuyOrderRequest? buyOrderRequest);
 
-        SellOrderResponse CreateSellOrder(SellOrderRequest? sellOrderRequest);
+        Task<SellOrderResponse> CreateSellOrder(SellOrderRequest? sellOrderRequest);
 
-        List<BuyOrderResponse> GetBuyOrders();
+        Task<List<BuyOrderResponse>> GetBuyOrders();
 
-        List<SellOrderResponse> GetSellOrders();
+        Task<List<SellOrderResponse>> GetSellOrders();
     }
 }
