@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using StocksApp.Application.Interfaces;
 using StocksApp.Domain.Models;
 using StocksApp.Domain.Validators;
+using StocksApp.Persistence;
 using StocksApp.Presentation.Models;
 
 namespace StocksApp.Application.Services
@@ -10,16 +12,14 @@ namespace StocksApp.Application.Services
     {
 		#region private fields
 		private readonly IMapper _mapper;
-        private readonly List<BuyOrder> _buyOrderList;
-        private readonly List<SellOrder> _sellOrderList;
+        private readonly StockMarketDbContext _ordersDb;
 		#endregion
 
 		#region constructors
-		public StocksService(IMapper mapper)
+		public StocksService(IMapper mapper, StockMarketDbContext ordersDb)
         {
             _mapper = mapper;
-            _buyOrderList = new List<BuyOrder>();
-            _sellOrderList = new List<SellOrder>();
+            _ordersDb = ordersDb;
         }
 		#endregion
 
