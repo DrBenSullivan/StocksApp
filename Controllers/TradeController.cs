@@ -76,7 +76,7 @@ namespace StocksApp.Controllers
         }
 
 		[HttpPost]
-        public IActionResult BuyOrder(BuyOrderRequest request)
+        public async Task<IActionResult> BuyOrder(BuyOrderRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -84,12 +84,12 @@ namespace StocksApp.Controllers
             }    
 
             request.DateAndTimeOfOrder = DateTime.Now;
-            BuyOrderResponse response = _stocksService.CreateBuyOrder(request);
+            BuyOrderResponse response = await _stocksService.CreateBuyOrder(request);
             return new RedirectToActionResult("Orders", "Trade", new { });
         }
 
         [HttpPost]
-        public IActionResult SellOrder(SellOrderRequest request)
+        public async Task<IActionResult> SellOrder(SellOrderRequest request)
         {
             if (!ModelState.IsValid)
             {
@@ -97,15 +97,15 @@ namespace StocksApp.Controllers
             }
 
             request.DateAndTimeOfOrder = DateTime.Now;
-            SellOrderResponse response = _stocksService.CreateSellOrder(request);
+            SellOrderResponse response = await _stocksService.CreateSellOrder(request);
             return new RedirectToActionResult("Orders", "Trade", new { });
         }
 
         [HttpGet]
-        public IActionResult Orders()
+        public async Task<IActionResult> Orders()
         {
-            List<BuyOrderResponse> buyOrders = _stocksService.GetBuyOrders();
-            List<SellOrderResponse> sellOrders = _stocksService.GetSellOrders();
+            List<BuyOrderResponse> buyOrders = await _stocksService.GetBuyOrders();
+            List<SellOrderResponse> sellOrders = await _stocksService.GetSellOrders();
             OrdersViewModel viewModel = new OrdersViewModel() { BuyOrders = buyOrders,SellOrders = sellOrders };
             return View(viewModel);
         }   
