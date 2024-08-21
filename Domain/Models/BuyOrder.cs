@@ -6,6 +6,6 @@ namespace StocksApp.Domain.Models
     {
         [Key]
         public Guid BuyOrderID { get; set; } = Guid.NewGuid();
-        public string TradeType = "BuyOrder";
+        public override string TradeType => "BuyOrder";
     }
 }

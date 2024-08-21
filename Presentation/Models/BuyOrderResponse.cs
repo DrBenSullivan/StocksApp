@@ -2,22 +2,10 @@
 
 namespace StocksApp.Presentation.Models
 {
-    public class BuyOrderResponse
+    public class BuyOrderResponse : OrderResponse
     {
         public Guid BuyOrderID { get; set; } = Guid.NewGuid();
-		public string TradeType = "BuyOrder";
-
-		public string? StockSymbol { get; set; }
-
-        public string? StockName { get; set; }
-
-        public DateTime DateAndTimeOfOrder { get; set; } = DateTime.Now;
-
-        public int Quantity { get; set; }
-
-        public double Price { get; set; }
-
-        public double TradeAmount { get; set; }
+		public override string TradeType => "BuyOrder";
 
 		public override bool Equals(object? obj)
 		{

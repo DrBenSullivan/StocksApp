@@ -1,13 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace StocksApp.Domain.Models
+﻿namespace StocksApp.Presentation.Models
 {
-	public abstract class Order
+	public abstract class OrderResponse
 	{
 		public virtual string? TradeType { get; set; }
-		[StringLength(5)]
 		public string? StockSymbol { get; set; }
-		[StringLength(100)]
 		public string? StockName { get; set; }
 		public DateTime DateAndTimeOfOrder { get; set; }
 		public int Quantity { get; set; }
