@@ -4,7 +4,8 @@ namespace StocksApp.Presentation.Models
 {
     public class SellOrderRequest : IValidatableObject
     {
-        [Required(ErrorMessage = "A StockSymbol was not provided. StockSymbol cannot be null or empty.")]
+		public string TradeType = "SellOrder";
+		[Required(ErrorMessage = "A StockSymbol was not provided. StockSymbol cannot be null or empty.")]
 		public string? StockSymbol { get; set; }
 
         [Required(ErrorMessage = "A StockName was not provided. StockName cannot be null or empty.")]

@@ -7,6 +7,7 @@ namespace StocksApp.Presentation.Models
     {
         [Required(ErrorMessage = "A StockSymbol was not provided. StockSymbol cannot be null or empty.")]
         public string? StockSymbol { get; set; }
+        public string TradeType = "BuyOrder";
 
         [Required(ErrorMessage = "A StockName was not provided. StockName cannot be null or empty.")]
         public string? StockName { get; set; }

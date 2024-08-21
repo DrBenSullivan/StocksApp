@@ -51,19 +51,13 @@ namespace StocksApp.Controllers
                     .GetValueOrDefault("name")?
                     .ToString()
                     ?? "Unknown";
-                int quantity = companyProfile.TryGetValue("shareOutstanding", out var quantityValue)
-                    ? (int)Convert.ToDouble(quantityValue.ToString())
-                    : 0;
-                double price = stockQuote.TryGetValue("c", out var priceValue)
-                    ? Convert.ToDouble(priceValue.ToString())
-                    : 0;
 
                 var stockTradeViewModel = new StockTradeViewModel()
                 {
                     StockSymbol = stockSymbol,
                     StockName = stockName,
-                    Price = price,
-                    Quantity = quantity
+                    Price = 0.00,
+                    Quantity = 0
                 };
 
                 ViewBag.FinnhubAPIKey = _configuration["FinnhubAPIKey"];
