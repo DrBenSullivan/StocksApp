@@ -1,0 +1,44 @@
+﻿@model OrdersPdfViewModel;
+@{
+	Layout = null;
+}
+<link href="@("http://" + Context.Request.Host.ToString() + "/Stylesheet.css")" rel="stylesheet" />
+
+<h2>Orders</h2>
+<table class="table mt w-100">
+	<thead>
+		<tr>
+			<th>
+				Date and Time
+			</th>
+			<th>
+				Stock
+			</th>
+			<th>
+				Order Type
+			</th>
+			<th>
+				Quantity
+			</th>
+			<th>
+				Price
+			</th>
+			<th>
+				Trade Amount
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var order in Model.Orders)
+		{
+			<tr>
+				<td>@order.DateAndTimeOfOrder</td>
+				<td>@order.StockName (@order.StockSymbol)</td>
+				<td>@order.TradeType</td>
+				<td>@order.Quantity</td>
+				<td>$ @order.Price.ToString("N")</td>
+				<td>$ @order.TradeAmount.ToString("N")</td>
+			</tr>
+		}
+	</tbody>
+</table>

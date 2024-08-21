@@ -1,18 +1,76 @@
 ﻿@model StockTradeViewModel
 @{
 	ViewBag.Title = Model.StockName;
-	
+	var sellActionUrl = Url.Action("SellOrder", "Trade");
+	var buyActionUrl = Url.Action("BuyOrder", "Trade");
 }
 
-<div class="box trading-panel">
-	<h1 class="stock-title">@Model.StockName (<span id="stock-symbol">@Model.StockSymbol</span>)</h1>
-	<h1>
-		<span class="text-grey">$</span><span id="stock-price">@Model.Price</span>
-	</h1>
+<div class="flex box trading-panel">
+
+	<div id="stock-price-panel">
+		<h1 class="stock-title">@Model.StockName (<span id="stock-symbol">@Model.StockSymbol</span>)</h1>
+		<h1>
+			<span class="text-grey">$ </span><span id="stock-price">Loading...</span>
+		</h1>
+	</div>
+
+	<div id="new-order-panel">
+		<h3 class="mb text-grey">New Order</h3>
+
+		<form method="post">
+			<div class="flex form-field">
+				<div class="w-25">
+					<label asp-for="Quantity" class="mt">Quantity</label>
+				</div>
+				<div class="flex-1">
+					<input asp-for="Quantity" placeholder="Quantity" class="form-input mb" autofocus="autofocus" />
+				</div>
+			</div>
+
+			<div class="button-panel">
+
+				<button type="submit" asp-controller="Trade" asp-action="SellOrder" class="trading-button button-red-back">
+					<i class="fa-solid fa-arrow-up"></i>
+					<span>Sell</span>
+				</button>
+
+				<button type="submit" asp-controller="Trade" asp-action="BuyOrder" class="trading-button button-green-back">
+					<i class="fa-solid fa-arrow-down"></i>
+					<span>Buy</span>
+				</button>
+
+				<div asp-validation-summary="All" class="text-red"></div>
+
+				@if (ViewBag.Errors != null)
+				{
+					<div class="text-red mt">
+						<ul>
+							@foreach (string error in ViewBag.Errors)
+							{
+								<li class="ml">@error</li>
+							}
+						</ul>
+					</div>
+				}
+
+			</div>
+
+			<input type="hidden" asp-for="StockSymbol" value="@Model.StockSymbol" />
+			<input type="hidden" asp-for="StockName" value="@Model.StockName" />
+			<input type="hidden" asp-for="Price" value="@Model.Price" id="order-form-price" />
+		</form>
+	</div>
 </div>
 
-@*	I recognise that this is an unsafe method of passing sensitive data but it is stipulated in the assignment brief.
-	In practice I would AJAX for the data to be sent by the backend.*@
-<input type="hidden" id="finnhub-api-key" value="@ViewBag.FinnHubAPIKey" />
 
-<script src="~/Scripts/FinnhubWebsocketScript.js" />
+
+@section Scripts
+{
+	@*	I recognise that this is an unsafe method of passing sensitive data but it is stipulated in the assignment brief. *@
+	@*  In practice I would AJAX for the data to be sent by the backend. *@
+	<input type="hidden" id="finnhub-api-key" value="@ViewBag.FinnHubAPIKey" />
+	<script src="~/Scripts/FinnhubWebsocketScript.js" />
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js" integrity="sha512-37T7leoNS06R80c8Ulq7cdCDU5MNQBwlYoy1TX/WUsLFC2eYNqtKlV0QjH7r8JpG/S0GUMZwebnVFLPd6SU5yg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validation-unobtrusive/3.2.12/jquery.validate.unobtrusive.min.js" integrity="sha512-o6XqxgrUsKmchwy9G5VRNWSSxTS4Urr4loO6/0hYdpWmFUfHqGzawGxeQGMDqYzxjY9sbktPbNlkIQJWagVZQg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+}

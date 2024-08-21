@@ -8,10 +8,22 @@
 	</head>
 	<body>
 		<div class="container">
-			<div class="header">
-				<i class="fa-solid fa-money-bill-trend-up"></i><span class="app-title">STOCKS</span>
+			<div class="header"><span class="app-title">STOCKS </span><i class="fa-solid fa-money-bill-trend-up logo"></i>
+				<ul>
+					<li>
+						<a asp-controller="Trade" asp-action="Index">Trade</a>
+					</li>
+					|
+					<li>
+						<a asp-controller="Trade" asp-action="Orders">Orders</a>
+					</li>
+				</ul>
 			</div>
-			@RenderBody()
+
+			<div class="page-content">
+				@RenderBody()
+			</div>
 		</div>
+		@RenderSection("Scripts", false)
 	</body>
 </html>

@@ -1,14 +1,33 @@
-using StocksAppWithConfiguration.Interfaces;
-using StocksAppWithConfiguration.Models;
-using StocksAppWithConfiguration.Services;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using StocksApp.Application.Interfaces;
+using StocksApp.Application.Services;
+using StocksApp.Domain.Mapping;
+using StocksApp.Domain.Models;
+using StocksApp.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddControllersWithViews();
+
+Rotativa.AspNetCore.RotativaConfiguration.Setup("wwwroot", wkhtmltopdfRelativePath: "Rotativa");
+
+builder.Services.AddControllersWithViews(options =>
+{
+	options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+});
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IFinnhubService, FinnhubService>();
+builder.Services.AddScoped<IStocksService, StocksService>();
 builder.Services.Configure<TradingOptions>(
 	builder.Configuration.GetSection("TradingOptions")
 );
+
+builder.Services.AddAutoMapper(config => {
+	config.AddProfile<DomainModelToPresentationModelProfile>();
+	config.AddProfile<PresentationModelToDomainModelProfile>();
+}, typeof(Program).Assembly);
+
+builder.Services.AddDbContext<StockMarketDbContext>(options =>
+	options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 app.UseStaticFiles();

@@ -1,10 +1,7 @@
 ﻿$(document).ready(function () {
     const finnhubKey = $('#finnhub-api-key').val();
-    const stockSymbol = $('#stock-symbol').html();
-    const openingPrice = $('#stock-price');
+    const stockSymbol = $('#stock-symbol').text();
     let newPrice;
-
-    console.log(`${finnhubKey}\nStock Symbol: ${stockSymbol}`);
 
     if (!finnhubKey || !stockSymbol) {
         console.error('API key or stock symbol is missing.');
@@ -23,21 +20,20 @@
         if (responseObject.error) {
             console.error(`Response error: ${responseObject.msg}`);
             newPrice = responseObject.msg;
-        } else if (responseObject.data && responseObject.data[0].p) {
-            console.log(`Valid response: ${responseObject.data[0].p}`);
+        } else if (responseObject.data && responseObject.data[0].p && responseObject.data[0].p != newPrice) {
             newPrice = responseObject.data[0].p.toFixed(2);
         }
 
-        openingPrice.html(newPrice.toString());
+        $('#stock-price').text(newPrice.toString());
+        $('#order-form-price').prop("value", newPrice);
+        
     });
 
     socket.addEventListener('error', function (event) {
         console.error(`Finnhub WebSocket error: ${event}`);
     });
 
-    socket.addEventListener('close', function (event) {
-        console.log('Finnhubb WebSocket is now closed.');
-    });
+    socket.addEventListener('close', function (event) { });
 
     window.addEventListener('beforeunload', function () {
         if (socket.readyState === WebSocket.OPEN) {

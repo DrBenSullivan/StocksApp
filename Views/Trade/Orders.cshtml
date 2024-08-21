@@ -1,0 +1,56 @@
+﻿@model OrdersViewModel;
+@{
+	ViewBag.Title = "All Orders";
+}
+<div class="w-100 ml">
+	<a asp-controller="Trade" asp-action="OrdersPdf">View as PDF</a>
+</div>
+<div class="flex">
+
+	<div class="flex box orders-list trading-panel w-40">
+		<div id="buy-orders-list">
+			<h4 class="mb text-grey text-center">Buy Orders</h4>
+			@foreach (var order in Model.BuyOrders)
+			{
+				<div class="border-bottom p">
+					<h3 class="mb">
+						@order.StockName <span class="text-grey">(@order.StockSymbol)</span>
+					</h3>
+					<h5 class="mb">
+						@order.Quantity<span class="text-grey"> shares at </span>$ @order.Price.ToString("N")<span class="text-grey"> each</span>
+					</h5>
+					<h5 class="mb">
+						<span class="text-grey">Total Purchase Value: </span>$ @order.TradeAmount.ToString("N")
+					</h5>
+					<p class="text-grey">
+						@order.DateAndTimeOfOrder
+					</p>
+				</div>
+			}	
+		</div>
+	</div>
+
+	<div class="flex box orders-list trading-panel w-40">
+		<div id="sell-orders-list">
+			<h4 class="mb text-grey text-center">Sell Orders</h4>
+			@foreach (var order in Model.SellOrders)
+			{
+				<div class="border-bottom p">
+					<h3 class="mb">
+						@order.StockName <span class="text-grey">(@order.StockSymbol)</span>
+					</h3>
+					<h5 class="mb">
+						@order.Quantity<span class="text-grey"> shares at </span>$ @order.Price.ToString("N")<span class="text-grey"> each</span>
+					</h5>
+					<h5 class="mb">
+						<span class="text-grey">Total Sale Value: </span>$ @order.TradeAmount.ToString("N")
+					</h5>
+					<p class="text-grey">
+						@order.DateAndTimeOfOrder
+					</p>
+				</div>
+			}
+		</div>
+	</div>
+
+</div>
