@@ -5,8 +5,9 @@ namespace StocksApp.Presentation.Models
     public class BuyOrderResponse
     {
         public Guid BuyOrderID { get; set; } = Guid.NewGuid();
+		public string TradeType = "BuyOrder";
 
-        public string? StockSymbol { get; set; }
+		public string? StockSymbol { get; set; }
 
         public string? StockName { get; set; }
 

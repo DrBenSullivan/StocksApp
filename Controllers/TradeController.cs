@@ -109,8 +109,18 @@ namespace StocksApp.Controllers
         {
             List<BuyOrderResponse> buyOrders = await _stocksService.GetBuyOrders();
             List<SellOrderResponse> sellOrders = await _stocksService.GetSellOrders();
-            OrdersViewModel viewModel = new OrdersViewModel() { BuyOrders = buyOrders, SellOrders = sellOrders };
+            var viewModel = new OrdersViewModel() { BuyOrders = buyOrders, SellOrders = sellOrders };
             return View(viewModel);
-        }   
+        }
+
+        [HttpGet]
+        [Route("/OrdersPDF")]
+        public async Task<IActionResult> OrdersPdf()
+        {
+            List<BuyOrderResponse> buyOrders = await _stocksService.GetBuyOrders();
+			List<SellOrderResponse> sellOrders = await _stocksService.GetSellOrders();
+			var viewModel = new OrdersViewModel() { BuyOrders = buyOrders, SellOrders = sellOrders };
+			return View(viewModel);
+	    }
     }
 }

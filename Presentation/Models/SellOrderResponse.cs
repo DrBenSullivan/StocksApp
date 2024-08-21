@@ -3,8 +3,9 @@
     public class SellOrderResponse
     {
         public Guid SellOrderID { get; set; } = Guid.NewGuid();
+		public string TradeType = "SellOrder";
 
-        public string? StockSymbol { get; set; }
+		public string? StockSymbol { get; set; }
 
         public string? StockName { get; set; }
 
