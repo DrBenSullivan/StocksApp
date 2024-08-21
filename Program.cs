@@ -7,6 +7,9 @@ using StocksApp.Domain.Models;
 using StocksApp.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
+
+Rotativa.AspNetCore.RotativaConfiguration.Setup("wwwroot", wkhtmltopdfRelativePath: "Rotativa");
+
 builder.Services.AddControllersWithViews(options =>
 {
 	options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());

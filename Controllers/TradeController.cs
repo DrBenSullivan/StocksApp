@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Options;
+using Rotativa.AspNetCore;
 using StocksApp.Application.Interfaces;
 using StocksApp.Domain.Models;
 using StocksApp.Presentation.Models;
@@ -120,7 +121,17 @@ namespace StocksApp.Controllers
             List<BuyOrderResponse> buyOrders = await _stocksService.GetBuyOrders();
 			List<SellOrderResponse> sellOrders = await _stocksService.GetSellOrders();
             var viewModel = new OrdersPdfViewModel(buyOrders, sellOrders);
-			return View(viewModel);
-	    }
+            return new ViewAsPdf("OrdersPdf", viewModel, ViewData)
+            {
+                PageMargins = new Rotativa.AspNetCore.Options.Margins()
+                {
+                    Top = 20,
+                    Right = 20,
+                    Bottom = 20,
+                    Left = 20
+                },
+                PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape
+            };
+		}
     }
 }
