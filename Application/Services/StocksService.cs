@@ -85,7 +85,7 @@ namespace StocksApp.Application.Services
 		/// <returns>Returns the list of BuyOrders as a l        ist of BuyOrderResponse DTOs.</returns>
 		public async Task<List<BuyOrderResponse>> GetBuyOrders()
         {
-			if (!_ordersDb.BuyOrders.Any()) return new List<BuyOrderResponse>();
+			if (!_ordersDb.BuyOrders.Any()) return [];
 
 			return await _ordersDb.BuyOrders
                 .Select(buyOrder => _mapper.Map<BuyOrderResponse>(buyOrder))
@@ -98,8 +98,7 @@ namespace StocksApp.Application.Services
         /// <returns>Returns the list of SellOrders as a list of SellOrderResponse DTOs.</returns>
         public async Task<List<SellOrderResponse>> GetSellOrders()
         {
-			if (!_ordersDb.SellOrders.Any()) return new List<SellOrderResponse>();
-
+			if (!_ordersDb.SellOrders.Any()) return [];
 
 			return await _ordersDb.SellOrders
                 .Select(sellOrder => _mapper.Map<SellOrderResponse>(sellOrder))
