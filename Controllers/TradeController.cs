@@ -30,32 +30,25 @@ namespace StocksApp.Controllers
 
 		[HttpGet]
         [Route("/")]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? stockAbbreviation)
 		{
             try
             {
-                string defaultStockSymbol = _tradingOptions.DefaultStockSymbol
+                string stockSymbol = stockAbbreviation is not null
+                    ? stockAbbreviation
+                    : _tradingOptions.DefaultStockSymbol
                     ?? throw new Exception("Default Stock Symbol not found in configuration.");
 
-                Dictionary<string, object> stockQuote = await _finnhubService.GetStockPriceQuote(defaultStockSymbol)
+                Dictionary<string, object> stockQuote = await _finnhubService.GetStockPriceQuote(stockSymbol)
                     ?? throw new Exception("Failed to retrieve stockQuote from finnhubService.");
 
-                Dictionary<string, object> companyProfile = await _finnhubService.GetCompanyProfile(defaultStockSymbol)
+                Dictionary<string, object> companyProfile = await _finnhubService.GetCompanyProfile(stockSymbol)
                     ?? throw new Exception("Failed to retrieve companyProfile from finnhubService.");
-
-                string stockSymbol = companyProfile
-                    .GetValueOrDefault("ticker")?
-                    .ToString()
-                    ?? "Unknown";
-                string stockName = companyProfile
-                    .GetValueOrDefault("name")?
-                    .ToString()
-                    ?? "Unknown";
 
                 var stockTradeViewModel = new StockTradeViewModel()
                 {
-                    StockSymbol = stockSymbol,
-                    StockName = stockName,
+                    StockSymbol = companyProfile.GetValueOrDefault("ticker")?.ToString() ?? "Unknown",
+                    StockName = companyProfile.GetValueOrDefault("name")?.ToString() ?? "Unknown",
                     Price = 0.00,
                     Quantity = 0
                 };
