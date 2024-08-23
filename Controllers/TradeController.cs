@@ -30,12 +30,12 @@ namespace StocksApp.Controllers
 
 		[HttpGet]
         [Route("/")]
-        public async Task<IActionResult> Index(string? stockAbbreviation)
+        public async Task<IActionResult> Index(string? symbol)
 		{
             try
             {
-                string stockSymbol = stockAbbreviation is not null
-                    ? stockAbbreviation
+                string stockSymbol = symbol is not null
+                    ? symbol
                     : _tradingOptions.DefaultStockSymbol
                     ?? throw new Exception("Default Stock Symbol not found in configuration.");
 
