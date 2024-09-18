@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using StocksApp.Application.Interfaces;
+using StocksApp.Domain.Models;
+using StocksApp.Presentation.Models.ViewModels;
 
 namespace StocksApp.Controllers
 {
@@ -7,22 +9,43 @@ namespace StocksApp.Controllers
 	{
 		#region private readonly fields
 		private readonly IFinnhubService _finnhubService;
+		private readonly IConfiguration _configuration;
 		#endregion
 
 		#region constructor
-		public StocksController(IFinnhubService finnhubService)
+		public StocksController(IFinnhubService finnhubService, IConfiguration configuration)
 		{
 			_finnhubService = finnhubService;
+			_configuration = configuration;	
 		}
 		#endregion
 
-		public async Task<IActionResult> Index()
+		[HttpGet]
+		[Route("/Stocks/Explore")]
+		public async Task<IActionResult> Explore()
 		{
 			try
 			{
-				Dictionary<string, object> stocksDict = await _finnhubService.GetStocks()
+				List<FinnhubStock> stocksResponse = await _finnhubService.GetStocks()
 					?? throw new Exception("Failed to retrieve stocks data from FinnhubAPI.");
-				return View(stocksDict);
+
+				string[] topStockSymbols = _configuration["Top25PopularStocks"].Split(',')
+					?? throw new Exception("Top 25 Popular Stocks not available in the current configuration.");
+
+				var stocks = new List<Stock>();
+
+				foreach (string stockSymbol in topStockSymbols)
+				{
+					FinnhubStock stock = stocksResponse.FirstOrDefault(r => r.symbol == stockSymbol)
+						?? throw new Exception($"Stock with symbol {stockSymbol} could not be found in the FinnhubAPI Response.");
+
+					stocks.Add(new Stock
+					{
+						StockName = stock.description,
+						StockSymbol = stock.symbol
+					});
+				}
+				return View(new StocksExploreViewModel{Stocks = stocks });
 			}
 
 			catch (Exception ex) 

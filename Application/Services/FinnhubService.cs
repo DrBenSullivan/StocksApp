@@ -1,6 +1,8 @@
 ﻿using System.Reflection.Metadata.Ecma335;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 using StocksApp.Application.Interfaces;
+using StocksApp.Domain.Models;
 
 namespace StocksApp.Application.Services
 {
@@ -25,14 +27,18 @@ namespace StocksApp.Application.Services
             return await GetApiResponse($"https://finnhub.io/api/v1/quote?symbol={stockSymbol}&token=");
         }
 
-        public async Task<Dictionary<string, object>?> GetStocks()
+        public async Task<List<FinnhubStock>?> GetStocks()
         {
-            return await GetApiResponse($"https://finnhub.io/api/v1/stock/symbol?exchange=US");
+            string apiResponse = await GetApiResponseString($"https://finnhub.io/api/v1/stock/symbol?exchange=US&token=");
+            List<FinnhubStock> stocks = JsonSerializer.Deserialize<List<FinnhubStock>>(apiResponse)
+                ?? throw new Exception("Finnhub API response could not be deserialised.");
+
+            return stocks;
         }
 
-        private async Task<Dictionary<string, object>?> GetApiResponse(string url)
-        {
-            using (HttpClient httpClient = _httpClientFactory.CreateClient())
+        private async Task<string> GetApiResponseString(string url)
+        { 
+            using  (HttpClient httpClient = _httpClientFactory.CreateClient())
             {
                 string finnhubSecretKey = _configuration["FinnhubAPIKey"]
                     ?? throw new Exception("Finnhub secret key not found in configuration.");
@@ -41,14 +47,19 @@ namespace StocksApp.Application.Services
                 HttpResponseMessage responseMessage = await httpClient.SendAsync(requestMessage);
                 responseMessage.EnsureSuccessStatusCode();
 
-                string responseString = await responseMessage.Content.ReadAsStringAsync();
-                Dictionary<string, object>? responseDictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(responseString);
-
-                if (responseDictionary == null) throw new InvalidOperationException("No response received from Finnhub API.");
-                if (responseDictionary.ContainsKey("error")) throw new InvalidOperationException(Convert.ToString(responseDictionary["error"]));
-
-                return responseDictionary;
+                return await responseMessage.Content.ReadAsStringAsync();
             }
+        }
+
+        private async Task<Dictionary<string, object>?> GetApiResponse(string url)
+        {
+            string responseString = await GetApiResponseString(url);
+            Dictionary<string, object>? responseDictionary = JsonSerializer.Deserialize<Dictionary<string, object>>(responseString);
+
+            if (responseDictionary == null) throw new InvalidOperationException("No response received from Finnhub API.");
+            if (responseDictionary.ContainsKey("error")) throw new InvalidOperationException(Convert.ToString(responseDictionary["error"]));
+
+            return responseDictionary;
         }
     }
 }

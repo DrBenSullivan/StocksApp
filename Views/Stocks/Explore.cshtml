@@ -1,0 +1,7 @@
+﻿@using StocksApp.Domain.Models
+@model StocksExploreViewModel
+
+@foreach (Stock stock in Model.Stocks)
+{
+	<p>@stock.StockSymbol</p>
+}
