@@ -16,10 +16,20 @@ namespace StocksApp.Controllers
 		}
 		#endregion
 
-		public async IActionResult Index()
+		public async Task<IActionResult> Index()
 		{
-			Dictionary<object, string> apiResults = await _finnhubService.GetStock
-			return View();
+			try
+			{
+				Dictionary<string, object> stocksDict = await _finnhubService.GetStocks()
+					?? throw new Exception("Failed to retrieve stocks data from FinnhubAPI.");
+				return View(stocksDict);
+			}
+
+			catch (Exception ex) 
+			{
+				Console.WriteLine(ex.Message);
+				return View(null);
+			}
 		}
 	}
 }
