@@ -25,6 +25,11 @@ namespace StocksApp.Application.Services
             return await GetApiResponse($"https://finnhub.io/api/v1/quote?symbol={stockSymbol}&token=");
         }
 
+        public async Task<Dictionary<string, object>?> GetStocks()
+        {
+            return await GetApiResponse($"https://finnhub.io/api/v1/stock/symbol?exchange=US");
+        }
+
         private async Task<Dictionary<string, object>?> GetApiResponse(string url)
         {
             using (HttpClient httpClient = _httpClientFactory.CreateClient())
@@ -32,7 +37,7 @@ namespace StocksApp.Application.Services
                 string finnhubSecretKey = _configuration["FinnhubAPIKey"]
                     ?? throw new Exception("Finnhub secret key not found in configuration.");
 
-                HttpRequestMessage requestMessage = new HttpRequestMessage(HttpMethod.Get, $"{url}{finnhubSecretKey}");
+                var requestMessage = new HttpRequestMessage(HttpMethod.Get, $"{url}{finnhubSecretKey}");
                 HttpResponseMessage responseMessage = await httpClient.SendAsync(requestMessage);
                 responseMessage.EnsureSuccessStatusCode();
 
