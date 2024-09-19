@@ -4,7 +4,7 @@ using System.Text.Json;
 using StocksApp.Application.Interfaces;
 using StocksApp.Domain.Models;
 
-namespace StocksApp.Application.Services
+namespace StocksApp.Application
 {
     public class FinnhubService : IFinnhubService
     {
@@ -37,8 +37,8 @@ namespace StocksApp.Application.Services
         }
 
         private async Task<string> GetApiResponseString(string url)
-        { 
-            using  (HttpClient httpClient = _httpClientFactory.CreateClient())
+        {
+            using (HttpClient httpClient = _httpClientFactory.CreateClient())
             {
                 string finnhubSecretKey = _configuration["FinnhubAPIKey"]
                     ?? throw new Exception("Finnhub secret key not found in configuration.");

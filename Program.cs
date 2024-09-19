@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StocksApp.Application;
 using StocksApp.Application.Interfaces;
-using StocksApp.Application.Services;
 using StocksApp.Domain.Mapping;
 using StocksApp.Domain.Models;
 using StocksApp.Persistence;

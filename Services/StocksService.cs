@@ -6,30 +6,30 @@ using StocksApp.Domain.Validators;
 using StocksApp.Persistence;
 using StocksApp.Presentation.Models;
 
-namespace StocksApp.Application.Services
+namespace StocksApp.Application
 {
     public class StocksService : IStocksService
     {
-		#region private fields
-		private readonly IMapper _mapper;
+        #region private fields
+        private readonly IMapper _mapper;
         private readonly StockMarketDbContext _ordersDb;
-		#endregion
+        #endregion
 
-		#region constructors
-		public StocksService(IMapper mapper, StockMarketDbContext ordersDb)
+        #region constructors
+        public StocksService(IMapper mapper, StockMarketDbContext ordersDb)
         {
             _mapper = mapper;
             _ordersDb = ordersDb;
         }
-		#endregion
+        #endregion
 
-		/// <summary>
-		/// Adds a new BuyOrder.
-		/// </summary>
-		/// <param name="buyOrderRequest">BuyOrder request data to add.</param>
-		/// <returns>Returns the BuyOrder data as a SellOrderResponse DTO.</returns>
-		/// <exception cref="ArgumentNullException"></exception>
-		public async Task<BuyOrderResponse> CreateBuyOrder(BuyOrderRequest? buyOrderRequest)
+        /// <summary>
+        /// Adds a new BuyOrder.
+        /// </summary>
+        /// <param name="buyOrderRequest">BuyOrder request data to add.</param>
+        /// <returns>Returns the BuyOrder data as a SellOrderResponse DTO.</returns>
+        /// <exception cref="ArgumentNullException"></exception>
+        public async Task<BuyOrderResponse> CreateBuyOrder(BuyOrderRequest? buyOrderRequest)
         {
             if (buyOrderRequest == null) throw new ArgumentNullException(nameof(buyOrderRequest));
 
@@ -38,18 +38,18 @@ namespace StocksApp.Application.Services
             BuyOrder buyOrder = _mapper.Map<BuyOrder>(buyOrderRequest);
             buyOrder.BuyOrderID = Guid.NewGuid();
 
-			try
-			{
-				await _ordersDb.BuyOrders.AddAsync(buyOrder);
-				await _ordersDb.SaveChangesAsync();
-			}
-			catch (DbUpdateException ex)
-			{
-				throw new Exception("An error occurred while saving the buy order.", ex);
-			}
+            try
+            {
+                await _ordersDb.BuyOrders.AddAsync(buyOrder);
+                await _ordersDb.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("An error occurred while saving the buy order.", ex);
+            }
 
-			return _mapper.Map<BuyOrderResponse>(buyOrder);
-		}
+            return _mapper.Map<BuyOrderResponse>(buyOrder);
+        }
 
         /// <summary>
         /// Adds a new SellOrder.
@@ -66,28 +66,28 @@ namespace StocksApp.Application.Services
             SellOrder sellOrder = _mapper.Map<SellOrder>(sellOrderRequest);
             sellOrder.SellOrderID = Guid.NewGuid();
 
-			try
-			{
-				await _ordersDb.SellOrders.AddAsync(sellOrder);
-				await _ordersDb.SaveChangesAsync();
-			}
-			catch (DbUpdateException ex)
-			{
-				throw new Exception("An error occurred while saving the sell order.", ex);
-			}
+            try
+            {
+                await _ordersDb.SellOrders.AddAsync(sellOrder);
+                await _ordersDb.SaveChangesAsync();
+            }
+            catch (DbUpdateException ex)
+            {
+                throw new Exception("An error occurred while saving the sell order.", ex);
+            }
 
-			return _mapper.Map<SellOrderResponse>(sellOrder);
+            return _mapper.Map<SellOrderResponse>(sellOrder);
         }
 
-		/// <summary>
-		/// Gets a list of all BuyOrders.
-		/// </summary>
-		/// <returns>Returns the list of BuyOrders as a l        ist of BuyOrderResponse DTOs.</returns>
-		public async Task<List<BuyOrderResponse>> GetBuyOrders()
+        /// <summary>
+        /// Gets a list of all BuyOrders.
+        /// </summary>
+        /// <returns>Returns the list of BuyOrders as a l        ist of BuyOrderResponse DTOs.</returns>
+        public async Task<List<BuyOrderResponse>> GetBuyOrders()
         {
-			if (!_ordersDb.BuyOrders.Any()) return [];
+            if (!_ordersDb.BuyOrders.Any()) return [];
 
-			return await _ordersDb.BuyOrders
+            return await _ordersDb.BuyOrders
                 .Select(buyOrder => _mapper.Map<BuyOrderResponse>(buyOrder))
                 .ToListAsync();
         }
@@ -98,9 +98,9 @@ namespace StocksApp.Application.Services
         /// <returns>Returns the list of SellOrders as a list of SellOrderResponse DTOs.</returns>
         public async Task<List<SellOrderResponse>> GetSellOrders()
         {
-			if (!_ordersDb.SellOrders.Any()) return [];
+            if (!_ordersDb.SellOrders.Any()) return [];
 
-			return await _ordersDb.SellOrders
+            return await _ordersDb.SellOrders
                 .Select(sellOrder => _mapper.Map<SellOrderResponse>(sellOrder))
                 .ToListAsync();
         }
