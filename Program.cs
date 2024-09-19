@@ -5,6 +5,8 @@ using StocksApp.Application.Interfaces;
 using StocksApp.Domain.Mapping;
 using StocksApp.Domain.Models;
 using StocksApp.Persistence;
+using StocksApp.Repositories;
+using StocksApp.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +18,7 @@ builder.Services.AddControllersWithViews(options =>
 });
 builder.Services.AddHttpClient();
 builder.Services.AddScoped<IFinnhubService, FinnhubService>();
+builder.Services.AddScoped<IFinnhubRepository, FinnhubRepository>();
 builder.Services.AddScoped<IStocksService, StocksService>();
 builder.Services.Configure<TradingOptions>(
 	builder.Configuration.GetSection("TradingOptions")
