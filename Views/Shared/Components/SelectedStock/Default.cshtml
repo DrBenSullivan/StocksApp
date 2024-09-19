@@ -9,7 +9,7 @@
                 </h1>
             </div>
             <div style="margin-left: auto;">
-                <button type="submit" asp-action="get" asp-controller="Trade" asp-action="Index" asp-route-symbol="@Model.StockSymbol" class="trading-button button-green-back" style="width: 100%">Trade</button>
+                <a asp-controller="Trade" asp-action="Index" asp-route-symbol="@Model.StockSymbol" class="trading-button button-green-back" style="width: 100%; margin-right:0;">Trade</a>
             </div>
         </div>
 

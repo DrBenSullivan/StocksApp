@@ -30,6 +30,7 @@ namespace StocksApp.Controllers
 
 		[HttpGet]
         [Route("/")]
+        [Route("Trade")]
         public async Task<IActionResult> Index(string? symbol)
 		{
             try
