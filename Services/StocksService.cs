@@ -5,6 +5,8 @@ using StocksApp.Domain.Models;
 using StocksApp.Domain.Validators;
 using StocksApp.Persistence;
 using StocksApp.Presentation.Models;
+using StocksApp.Repositories;
+using StocksApp.Repositories.Interfaces;
 
 namespace StocksApp.Application
 {
@@ -12,14 +14,14 @@ namespace StocksApp.Application
     {
         #region private fields
         private readonly IMapper _mapper;
-        private readonly StockMarketDbContext _ordersDb;
+        private readonly IStocksRepository _stocksRepository;
         #endregion
 
         #region constructors
-        public StocksService(IMapper mapper, StockMarketDbContext ordersDb)
+        public StocksService(IMapper mapper, IStocksRepository stocksRepostiory)
         {
+            _stocksRepository = stocksRepostiory;
             _mapper = mapper;
-            _ordersDb = ordersDb;
         }
         #endregion
 
@@ -38,17 +40,7 @@ namespace StocksApp.Application
             BuyOrder buyOrder = _mapper.Map<BuyOrder>(buyOrderRequest);
             buyOrder.BuyOrderID = Guid.NewGuid();
 
-            try
-            {
-                await _ordersDb.BuyOrders.AddAsync(buyOrder);
-                await _ordersDb.SaveChangesAsync();
-            }
-            catch (DbUpdateException ex)
-            {
-                throw new Exception("An error occurred while saving the buy order.", ex);
-            }
-
-            return _mapper.Map<BuyOrderResponse>(buyOrder);
+            return _mapper.Map<BuyOrderResponse>(await _stocksRepository.CreateBuyOrder(buyOrder));
         }
 
         /// <summary>
@@ -66,17 +58,7 @@ namespace StocksApp.Application
             SellOrder sellOrder = _mapper.Map<SellOrder>(sellOrderRequest);
             sellOrder.SellOrderID = Guid.NewGuid();
 
-            try
-            {
-                await _ordersDb.SellOrders.AddAsync(sellOrder);
-                await _ordersDb.SaveChangesAsync();
-            }
-            catch (DbUpdateException ex)
-            {
-                throw new Exception("An error occurred while saving the sell order.", ex);
-            }
-
-            return _mapper.Map<SellOrderResponse>(sellOrder);
+            return _mapper.Map<SellOrderResponse>(await _stocksRepository.CreateSellOrder(sellOrder));
         }
 
         /// <summary>
@@ -85,11 +67,11 @@ namespace StocksApp.Application
         /// <returns>Returns the list of BuyOrders as a list of BuyOrderResponse DTOs.</returns>
         public async Task<List<BuyOrderResponse>> GetBuyOrders()
         {
-            if (!_ordersDb.BuyOrders.Any()) return [];
+            var buyOrders = await _stocksRepository.GetBuyOrders();
 
-            return await _ordersDb.BuyOrders
+            return buyOrders
                 .Select(buyOrder => _mapper.Map<BuyOrderResponse>(buyOrder))
-                .ToListAsync();
+                .ToList();
         }
 
         /// <summary>
@@ -98,11 +80,11 @@ namespace StocksApp.Application
         /// <returns>Returns the list of SellOrders as a list of SellOrderResponse DTOs.</returns>
         public async Task<List<SellOrderResponse>> GetSellOrders()
         {
-            if (!_ordersDb.SellOrders.Any()) return [];
+            var sellOrders = await _stocksRepository.GetSellOrders();
 
-            return await _ordersDb.SellOrders
+            return sellOrders
                 .Select(sellOrder => _mapper.Map<SellOrderResponse>(sellOrder))
-                .ToListAsync();
+                .ToList();
         }
     }
 }
