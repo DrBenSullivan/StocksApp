@@ -1,7 +1,31 @@
 ﻿@using StocksApp.Domain.Models
 @model StocksExploreViewModel
 
-@foreach (Stock stock in Model.Stocks)
-{
-	<p>@stock.StockSymbol</p>
-}
+<div class="flex">
+	<div class="box w-50">
+		<div class="flex mt mb" style="justify-content: space-between">
+			<div>
+				<h3 class="text-grey">Stocks</h3>
+			</div>
+			<div>
+				<a asp-controller="Stocks" asp-action="Explore" asp-route-display-all="true">All Stocks</a>
+			</div>
+		</div>
+	
+		<div class="list-container">
+			<ul class="list">
+				@foreach (Stock stock in Model.Stocks)
+				{
+					<li>
+						<a asp-controller="Stocks" asp-action="Explore" asp-route-stock="@stock.StockSymbol" style="text-decoration: none">
+							<h3>@stock.StockName</h3>
+							<p class="text-grey">@stock.StockSymbol</p>
+						</a>
+					</li>
+				}
+			</ul>
+		</div>
+	</<div>
+	<div class="w-50">
+	</div>
+</div>

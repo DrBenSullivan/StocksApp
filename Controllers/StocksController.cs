@@ -22,7 +22,7 @@ namespace StocksApp.Controllers
 
 		[HttpGet]
 		[Route("/Stocks/Explore")]
-		public async Task<IActionResult> Explore()
+		public async Task<IActionResult> Explore(string? stock, bool displayAll = false)
 		{
 			try
 			{
@@ -34,15 +34,15 @@ namespace StocksApp.Controllers
 
 				var stocks = new List<Stock>();
 
-				foreach (string stockSymbol in topStockSymbols)
+				foreach (var stockSymbol in topStockSymbols)
 				{
-					FinnhubStock stock = stocksResponse.FirstOrDefault(r => r.symbol == stockSymbol)
+					FinnhubStock includedStock = stocksResponse.FirstOrDefault(r => r.symbol == stockSymbol)
 						?? throw new Exception($"Stock with symbol {stockSymbol} could not be found in the FinnhubAPI Response.");
 
 					stocks.Add(new Stock
 					{
-						StockName = stock.description,
-						StockSymbol = stock.symbol
+						StockName = includedStock.description,
+						StockSymbol = includedStock.symbol
 					});
 				}
 				return View(new StocksExploreViewModel{Stocks = stocks });
