@@ -1,13 +1,11 @@
-﻿using System.Text.Json;
-using StocksApp.Application.Interfaces;
-using StocksApp.Domain.Models;
+﻿using StocksApp.Application.Interfaces;
 using StocksApp.Repositories.Interfaces;
 
 namespace StocksApp.Application
 {
     public class FinnhubService : IFinnhubService
     {
-		#region private readonly fields
+        #region private readonly fields
         private readonly IFinnhubRepository _finnhubRepository;
         #endregion
 
@@ -16,11 +14,11 @@ namespace StocksApp.Application
         {
             _finnhubRepository = finnhubRepository;
         }
-		#endregion
+        #endregion
 
-		public async Task<Dictionary<string, object>?> GetCompanyProfile(string stockSymbol)
+        public async Task<Dictionary<string, object>?> GetCompanyProfile(string stockSymbol)
         {
-			return await _finnhubRepository.GetCompanyProfile(stockSymbol);
+            return await _finnhubRepository.GetCompanyProfile(stockSymbol);
         }
 
         public async Task<Dictionary<string, object>?> GetStockPriceQuote(string stockSymbol)

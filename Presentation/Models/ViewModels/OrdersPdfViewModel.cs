@@ -1,24 +1,21 @@
-﻿using System.ComponentModel.DataAnnotations;
-using StocksApp.Domain.Models;
-
-namespace StocksApp.Presentation.Models.ViewModels
+﻿namespace StocksApp.Presentation.Models.ViewModels
 {
-	public class OrdersPdfViewModel
-	{
-		public List<OrderResponse> Orders { get; set; } = [];
+    public class OrdersPdfViewModel
+    {
+        public List<OrderResponse> Orders { get; set; } = [];
 
-		public OrdersPdfViewModel(List<BuyOrderResponse>? buyOrders, List<SellOrderResponse>? sellOrders)
-		{
-			if (buyOrders != null)
-				Orders.AddRange(buyOrders);
+        public OrdersPdfViewModel(List<BuyOrderResponse>? buyOrders, List<SellOrderResponse>? sellOrders)
+        {
+            if (buyOrders != null)
+                Orders.AddRange(buyOrders);
 
-			if (sellOrders != null)
-				Orders.AddRange(sellOrders);
+            if (sellOrders != null)
+                Orders.AddRange(sellOrders);
 
-			Orders = Orders
-				.OrderBy(o => o.DateAndTimeOfOrder)
-				.ToList();
-		}
-	}
+            Orders = Orders
+                .OrderBy(o => o.DateAndTimeOfOrder)
+                .ToList();
+        }
+    }
 }
 

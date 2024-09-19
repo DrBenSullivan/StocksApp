@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.Extensions.Options;
 using Rotativa.AspNetCore;
 using StocksApp.Application.Interfaces;
@@ -11,28 +10,28 @@ namespace StocksApp.Controllers
 {
     public class TradeController : Controller
     {
-		#region private readonly fields
-		private readonly TradingOptions _tradingOptions;
+        #region private readonly fields
+        private readonly TradingOptions _tradingOptions;
         private readonly IFinnhubService _finnhubService;
         private readonly IStocksService _stocksService;
         private readonly IConfiguration _configuration;
-		#endregion
+        #endregion
 
-		#region constructors
-		public TradeController(IOptions<TradingOptions> tradingOptions, IFinnhubService finnhubService, IStocksService stocksService, IConfiguration configuration)
+        #region constructors
+        public TradeController(IOptions<TradingOptions> tradingOptions, IFinnhubService finnhubService, IStocksService stocksService, IConfiguration configuration)
         {
             _tradingOptions = tradingOptions.Value;
             _finnhubService = finnhubService;
             _stocksService = stocksService;
             _configuration = configuration;
         }
-		#endregion
+        #endregion
 
-		[HttpGet]
+        [HttpGet]
         [Route("/")]
         [Route("Trade")]
         public async Task<IActionResult> Index(string? symbol)
-		{
+        {
             try
             {
                 string stockSymbol = symbol is not null
@@ -64,14 +63,14 @@ namespace StocksApp.Controllers
             }
         }
 
-		[HttpPost]
+        [HttpPost]
         [Route("/BuyOrder")]
         public async Task<IActionResult> BuyOrder(BuyOrderRequest request)
         {
             if (!ModelState.IsValid)
             {
                 return RedirectToAction("Orders", "Trade", request);
-            }    
+            }
 
             request.DateAndTimeOfOrder = DateTime.Now;
             BuyOrderResponse response = await _stocksService.CreateBuyOrder(request);
@@ -107,7 +106,7 @@ namespace StocksApp.Controllers
         public async Task<IActionResult> OrdersPdf()
         {
             List<BuyOrderResponse> buyOrders = await _stocksService.GetBuyOrders();
-			List<SellOrderResponse> sellOrders = await _stocksService.GetSellOrders();
+            List<SellOrderResponse> sellOrders = await _stocksService.GetSellOrders();
             var viewModel = new OrdersPdfViewModel(buyOrders, sellOrders);
             return new ViewAsPdf("OrdersPdf", viewModel, ViewData)
             {
@@ -120,6 +119,6 @@ namespace StocksApp.Controllers
                 },
                 PageOrientation = Rotativa.AspNetCore.Options.Orientation.Landscape
             };
-		}
+        }
     }
 }

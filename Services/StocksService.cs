@@ -1,11 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.EntityFrameworkCore;
 using StocksApp.Application.Interfaces;
 using StocksApp.Domain.Models;
 using StocksApp.Domain.Validators;
-using StocksApp.Persistence;
 using StocksApp.Presentation.Models;
-using StocksApp.Repositories;
 using StocksApp.Repositories.Interfaces;
 
 namespace StocksApp.Application

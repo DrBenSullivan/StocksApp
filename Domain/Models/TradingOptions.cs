@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-
-namespace StocksApp.Domain.Models
+﻿namespace StocksApp.Domain.Models
 {
     public class TradingOptions
     {

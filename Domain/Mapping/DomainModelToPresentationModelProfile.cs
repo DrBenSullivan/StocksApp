@@ -4,12 +4,12 @@ using StocksApp.Presentation.Models;
 
 namespace StocksApp.Domain.Mapping
 {
-	public class DomainModelToPresentationModelProfile : Profile
-	{
-		public DomainModelToPresentationModelProfile()
-		{
-			CreateMap<BuyOrder, BuyOrderResponse>();
-			CreateMap<SellOrder, SellOrderResponse>();
-		}
-	}
+    public class DomainModelToPresentationModelProfile : Profile
+    {
+        public DomainModelToPresentationModelProfile()
+        {
+            CreateMap<BuyOrder, BuyOrderResponse>();
+            CreateMap<SellOrder, SellOrderResponse>();
+        }
+    }
 }

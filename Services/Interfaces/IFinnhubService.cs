@@ -1,6 +1,4 @@
-﻿using StocksApp.Domain.Models;
-
-namespace StocksApp.Application.Interfaces
+﻿namespace StocksApp.Application.Interfaces
 {
     public interface IFinnhubService
     {

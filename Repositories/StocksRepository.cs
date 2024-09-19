@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StocksApp.Domain.Models;
 using StocksApp.Persistence;
-using StocksApp.Presentation.Models;
 using StocksApp.Repositories.Interfaces;
 
 namespace StocksApp.Repositories
