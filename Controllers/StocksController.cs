@@ -26,7 +26,7 @@ namespace StocksApp.Controllers
 		{
 			try
 			{
-				List<FinnhubStock> stocksResponse = await _finnhubService.GetStocks()
+				List<Dictionary<string, string>> stocksResponse = await _finnhubService.GetStocks()
 					?? throw new Exception("Failed to retrieve stocks data from FinnhubAPI.");
 
 				string[] topStockSymbols = _configuration["Top25PopularStocks"].Split(',')
@@ -36,13 +36,13 @@ namespace StocksApp.Controllers
 
 				foreach (var stockSymbol in topStockSymbols)
 				{
-					FinnhubStock includedStock = stocksResponse.FirstOrDefault(r => r.symbol == stockSymbol)
+					Dictionary<string, string>? includedStock = stocksResponse.FirstOrDefault(r => r.ContainsKey("symbol") && r["symbol"] == stockSymbol)
 						?? throw new Exception($"Stock with symbol {stockSymbol} could not be found in the FinnhubAPI Response.");
 
 					stocks.Add(new Stock
 					{
-						StockName = includedStock.description,
-						StockSymbol = includedStock.symbol
+						StockName = includedStock["description"] ?? "NAME NOT FOUND",
+						StockSymbol = includedStock["symbol"] ?? "ERR"
 					});
 				}
 				return View(new StocksExploreViewModel{Stocks = stocks });
