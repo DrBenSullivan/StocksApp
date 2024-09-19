@@ -11,6 +11,7 @@ using AutoFixture;
 using StocksApp.Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using FluentAssertions.Specialized;
+using FluentAssertions.Common;
 
 namespace StocksAppTests
 {
@@ -126,13 +127,7 @@ namespace StocksAppTests
 		[Fact]
 		public async Task CreateBuyOrder_ProperBuyOrderRequest_ReturnsValidBuyOrderResponseAsync()
 		{
-			var testBuyOrderRequest = _fixture.Build<BuyOrderRequest>()
-				.With(r => r.StockName, "Test")
-				.With(r => r.StockSymbol, "TEST")
-				.With(r => r.DateAndTimeOfOrder, DateTime.Now)
-				.With(r => r.Quantity, 1)
-				.With(r => r.Price, 1)
-				.Create();
+			var testBuyOrderRequest = _fixture.Create<BuyOrderRequest>();
 
 			var expectedBuyOrder = _mapper.Map<BuyOrder>(testBuyOrderRequest);
 			var expectedBuyOrderResponse = _mapper.Map<BuyOrderResponse>(expectedBuyOrder);
@@ -277,162 +272,114 @@ namespace StocksAppTests
 		}
 	}
 	#endregion
+
+	#region StocksService.GetBuyOrders()
+	public class StocksService_GetBuyOrders_UnitTest
+	{
+		private readonly Mock<IStocksRepository> _mockStocksRepository;
+		private readonly IStocksRepository _stocksRepository;
+		private readonly IStocksService _stocksService;
+		private readonly IMapper _mapper;	
+		private readonly IFixture _fixture;
+
+		public StocksService_GetBuyOrders_UnitTest()
+		{
+			var serviceCollection = new ServiceCollection();
+			serviceCollection.AddAutoMapper(typeof(DomainModelToPresentationModelProfile));
+			serviceCollection.AddAutoMapper(typeof(PresentationModelToDomainModelProfile));
+			var serviceProvider = serviceCollection.BuildServiceProvider();
+			_mapper = serviceProvider.GetRequiredService<IMapper>();
+
+			_mockStocksRepository = new Mock<IStocksRepository>();
+			_stocksRepository = _mockStocksRepository.Object;
+			_stocksService = new StocksService(_mapper, _stocksRepository);
+			_fixture = new Fixture();
+		}
+
+		// By default, GetBuyOrders should return an empty list of BuyOrders.
+		[Fact]
+		public async Task GetBuyOrders_ReturnsEmptyListAsDefault()
+		{
+			_mockStocksRepository
+				.Setup(r => r.GetBuyOrders())
+				.ReturnsAsync([]);
+
+			var result = await _stocksService.GetBuyOrders();
+			var expected = new List<BuyOrderResponse>();
+
+			result.Should().BeEquivalentTo(expected);
+		}
+
+		// After adding buy orders using the CreateBuyOrder() method, GetBuyOrders should return a list containing the same buy orders.
+		[Fact]
+		public async Task GetBuyOrders_ReturnsCorrectListOfBuyOrdersAfterAddingThem()
+		{
+			var buyOrders = _fixture.CreateMany<BuyOrder>().ToList();
+			var buyOrderResponses = buyOrders.Select(order => _mapper.Map<BuyOrderResponse>(order)).ToList();
+
+			_mockStocksRepository
+				.Setup(r => r.GetBuyOrders())
+				.ReturnsAsync(buyOrders);
+
+			var result = await _stocksService.GetBuyOrders();
+
+			result.Should().BeEquivalentTo(buyOrderResponses);
+		}
+	}
+	#endregion
+
+	#region StocksService.GetSellOrders()
+	public class StocksService_GetSellOrders_UnitTest
+	{
+		private readonly Mock<IStocksRepository> _mockStocksRepository;
+		private readonly IStocksRepository _stocksRepository;
+		private readonly IStocksService _stocksService;
+		private readonly IMapper _mapper;	
+		private readonly IFixture _fixture;
+
+		public StocksService_GetSellOrders_UnitTest()
+		{
+			var serviceCollection = new ServiceCollection();
+			serviceCollection.AddAutoMapper(typeof(DomainModelToPresentationModelProfile));
+			serviceCollection.AddAutoMapper(typeof(PresentationModelToDomainModelProfile));
+			var serviceProvider = serviceCollection.BuildServiceProvider();
+			_mapper = serviceProvider.GetRequiredService<IMapper>();
+
+			_mockStocksRepository = new Mock<IStocksRepository>();
+			_stocksRepository = _mockStocksRepository.Object;
+			_stocksService = new StocksService(_mapper, _stocksRepository);
+			_fixture = new Fixture();
+		}
+
+		// By default, GetSellOrders should return an empty list of SellOrders.
+		[Fact]
+		public async Task GetSellOrders_ReturnsEmptyListAsDefault()
+		{
+			_mockStocksRepository
+				.Setup(r => r.GetSellOrders())
+				.ReturnsAsync([]);
+
+			var result = await _stocksService.GetSellOrders();
+			var expected = new List<SellOrderResponse>();
+
+			result.Should().BeEquivalentTo(expected);
+		}
+
+		// After adding sell orders using the CreateSellOrder() method, GetSellOrders should return a list containing the same sell orders.
+		[Fact]
+		public async Task GetSellOrders_ReturnsCorrectListOfSellOrdersAfterAddingThem()
+		{
+			var sellOrders = _fixture.CreateMany<SellOrder>().ToList();
+			var sellOrderResponses = sellOrders.Select(order => _mapper.Map<SellOrderResponse>(order)).ToList();
+
+			_mockStocksRepository
+				.Setup(r => r.GetSellOrders())
+				.ReturnsAsync(sellOrders);
+
+			var result = await _stocksService.GetSellOrders();
+
+			result.Should().BeEquivalentTo(sellOrderResponses);
+		}
+	}
+	#endregion
 }
-//	#region StocksService.GetBuyOrders()
-//	public class StocksService_GetBuyOrders_UnitTest
-//	{
-//		private readonly IMapper _mapper;
-//		private readonly IStocksService _stocksService;
-
-//		public StocksService_GetBuyOrders_UnitTest()
-//		{
-//			var serviceCollection = new ServiceCollection();
-//			serviceCollection.AddAutoMapper(typeof(DomainModelToPresentationModelProfile));
-//			serviceCollection.AddAutoMapper(typeof(PresentationModelToDomainModelProfile));
-//			var serviceProvider = serviceCollection.BuildServiceProvider();
-//			_mapper = serviceProvider.GetRequiredService<IMapper>();
-
-//			_stocksService = new StocksService(_mapper);
-//		}
-
-//		// By default, GetBuyOrders should return an empty list of BuyOrders.
-//		[Fact]
-//		public void GetBuyOrders_ReturnsEmptyListAsDefault()
-//		{
-//			List<BuyOrderResponse> outputBuyOrderResponseList = _stocksService.GetBuyOrders();
-//			Assert.Empty(outputBuyOrderResponseList);
-//		}
-
-//		// After adding buy orders using the CreateBuyOrder() method, GetBuyOrders should return a list containing the same buy orders.
-//		[Fact]
-//		public void GetBuyOrders_ReturnsCorrectListOfBuyOrdersAfterAddingThem()
-//		{
-//			BuyOrderRequest testBuyOrderRequest_1 = new BuyOrderRequest()
-//			{
-//				StockSymbol = "TEST1",
-//				StockName = "Test1",
-//				DateAndTimeOfOrder = new DateTime(2001,1,1),
-//				Quantity = 1,
-//				Price = 1
-//			};
-
-//			BuyOrderRequest testBuyOrderRequest_2 = new BuyOrderRequest()
-//			{
-//				StockSymbol = "TEST2",
-//				StockName = "Test2",
-//				DateAndTimeOfOrder = new DateTime(2002, 2, 2),
-//				Quantity = 1,
-//				Price = 1
-//			};
-
-//			BuyOrderRequest testBuyOrderRequest_3 = new BuyOrderRequest()
-//			{
-//				StockSymbol = "TEST3",
-//				StockName = "Test3",
-//				DateAndTimeOfOrder = new DateTime(2003, 3, 3),
-//				Quantity = 1,
-//				Price = 1
-//			};
-
-//			List<BuyOrderRequest> testBuyOrderRequestList = new List<BuyOrderRequest>()
-//			{
-//				testBuyOrderRequest_1, testBuyOrderRequest_2, testBuyOrderRequest_3
-//			};
-
-//			List<BuyOrderResponse> outputBuyOrderResponseList = new List<BuyOrderResponse>();
-
-//			foreach (BuyOrderRequest request in testBuyOrderRequestList)
-//			{
-//				BuyOrderResponse response = _stocksService.CreateBuyOrder(request);
-//				outputBuyOrderResponseList.Add(response);
-//			}
-
-//			List<BuyOrderResponse> buyOrderResponseListFromGet = _stocksService.GetBuyOrders();
-
-//			foreach (BuyOrderResponse buyOrderFromGet in buyOrderResponseListFromGet)
-//			{
-//				Assert.Contains(buyOrderFromGet, outputBuyOrderResponseList);
-//			}
-//		}
-//	}
-//	#endregion
-
-//	#region StocksService.GetSellOrders()
-//	public class StocksService_GetSellOrders_UnitTest
-//	{
-//		private readonly IMapper _mapper;
-//		private readonly IStocksService _stocksService;
-
-//		public StocksService_GetSellOrders_UnitTest()
-//		{
-//			var serviceCollection = new ServiceCollection();
-//			serviceCollection.AddAutoMapper(typeof(DomainModelToPresentationModelProfile));
-//			serviceCollection.AddAutoMapper(typeof(PresentationModelToDomainModelProfile));
-//			var serviceProvider = serviceCollection.BuildServiceProvider();
-//			_mapper = serviceProvider.GetRequiredService<IMapper>();
-
-//			_stocksService = new StocksService(_mapper);
-//		}
-
-//		// By default, GetSellOrders should return an empty list of SellOrders.
-//		[Fact]
-//		public void GetSellOrders_ReturnsEmptyListAsDefault()
-//		{
-//			List<SellOrderResponse> outputSellOrderResponseList = _stocksService.GetSellOrders();
-//			Assert.Empty(outputSellOrderResponseList);
-//		}
-
-//		// After adding sell orders using the CreateSellOrder() method, GetSellOrders should return a list containing the same sell orders.
-//		[Fact]
-//		public void GetSellOrders_ReturnsCorrectListOfSellOrdersAfterAddingThem()
-//		{
-//			SellOrderRequest testSellOrderRequest_1 = new SellOrderRequest()
-//			{
-//				StockSymbol = "TEST1",
-//				StockName = "Test1",
-//				DateAndTimeOfOrder = new DateTime(2001, 1, 1),
-//				Quantity = 1,
-//				Price = 1
-//			};
-
-//			SellOrderRequest testSellOrderRequest_2 = new SellOrderRequest()
-//			{
-//				StockSymbol = "TEST2",
-//				StockName = "Test2",
-//				DateAndTimeOfOrder = new DateTime(2002, 2, 2),
-//				Quantity = 1,
-//				Price = 1
-//			};
-
-//			SellOrderRequest testSellOrderRequest_3 = new SellOrderRequest()
-//			{
-//				StockSymbol = "TEST3",
-//				StockName = "Test3",
-//				DateAndTimeOfOrder = new DateTime(2003, 3, 3),
-//				Quantity = 1,
-//				Price = 1
-//			};
-
-//			List<SellOrderRequest> testSellOrderRequestList = new List<SellOrderRequest>()
-//			{
-//				testSellOrderRequest_1, testSellOrderRequest_2, testSellOrderRequest_3
-//			};
-
-//			List<SellOrderResponse> outputSellOrderResponseList = new List<SellOrderResponse>();
-
-//			foreach (SellOrderRequest request in testSellOrderRequestList)
-//			{
-//				SellOrderResponse response = _stocksService.CreateSellOrder(request);
-//				outputSellOrderResponseList.Add(response);
-//			}
-
-//			List<SellOrderResponse> sellOrderResponseListFromGet = _stocksService.GetSellOrders();
-
-//			foreach (SellOrderResponse sellOrderFromGet in sellOrderResponseListFromGet)
-//			{
-//				Assert.Contains(sellOrderFromGet, outputSellOrderResponseList);
-//			}
-//		}
-//	}
-//	#endregion
-//}
