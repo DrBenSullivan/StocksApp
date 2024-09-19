@@ -6,7 +6,7 @@ namespace StocksApp.Application.Interfaces
     {
         Task<Dictionary<string, object>?> GetCompanyProfile(string stockSymbol);
         Task<Dictionary<string, object>?> GetStockPriceQuote(string stockSymbol);
-        Task<List<FinnhubStock>?> GetStocks();
+        Task<List<Dictionary<string, string>>?> GetStocks();
 
 
     }

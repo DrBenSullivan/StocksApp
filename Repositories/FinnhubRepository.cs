@@ -1,6 +1,4 @@
-﻿using System.Runtime.InteropServices;
-using System.Text.Json;
-using StocksApp.Domain.Models;
+﻿using System.Text.Json;
 using StocksApp.Repositories.Interfaces;
 
 namespace StocksApp.Repositories
