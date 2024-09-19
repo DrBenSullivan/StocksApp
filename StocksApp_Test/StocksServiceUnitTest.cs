@@ -10,6 +10,7 @@ using StocksApp.Application;
 using AutoFixture;
 using StocksApp.Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using FluentAssertions.Specialized;
 
 namespace StocksAppTests
 {
@@ -146,153 +147,137 @@ namespace StocksAppTests
 		}
 	}
 	#endregion
+
+	#region StocksService.CreateSellOrder()
+	public class StocksService_CreateSellOrder_UnitTest
+	{
+		private readonly Mock<IStocksRepository> _mockStocksRepository;
+		private readonly IStocksRepository _stocksRepository;
+		private readonly IStocksService _stocksService;
+		private readonly IMapper _mapper;	
+		private readonly IFixture _fixture;
+
+		public StocksService_CreateSellOrder_UnitTest()
+		{
+			var serviceCollection = new ServiceCollection();
+			serviceCollection.AddAutoMapper(typeof(DomainModelToPresentationModelProfile));
+			serviceCollection.AddAutoMapper(typeof(PresentationModelToDomainModelProfile));
+			var serviceProvider = serviceCollection.BuildServiceProvider();
+			_mapper = serviceProvider.GetRequiredService<IMapper>();
+
+			_mockStocksRepository = new Mock<IStocksRepository>();
+			_stocksRepository = _mockStocksRepository.Object;
+			_stocksService = new StocksService(_mapper, _stocksRepository);
+			_fixture = new Fixture();
+		}
+
+		// When null passed as parameter to CreateSellOrder, throw ArgumentNullException.
+		[Fact]
+		public void CreateSellOrder_NullParameter_ThrowsArgumentNullException()
+		{
+			Func<Task> action = async () => await _stocksService.CreateSellOrder(null);
+
+			action.Should().ThrowAsync<ArgumentNullException>();
+		}
+
+		// When a sellOrderRequest with Quantity = 0 (specified range 1-100000) passed as paramter to CreateSellOrder, throw ArgumentException.
+		[Fact]
+		public void CreateSellOrder_SellOrderRequest_QuantityNull_ThrowsArgumentException()
+		{
+			var testSellOrderRequest = _fixture.Build<SellOrderRequest>()
+				.With(r => r.Quantity, 0)
+				.Create();
+
+			Func<Task> action = async () => await _stocksService.CreateSellOrder(testSellOrderRequest);
+
+			action.Should().ThrowAsync<ArgumentException>();
+		}
+
+		// When a sellOrderRequest with Quantity = 100001 (specified range 1-100000) passed as parameter to CreateSellOrder, throw ArgumentException.
+		[Fact]
+		public void CreateSellOrder_SellOrderRequest_Quantity100001_ThrowsArgumentException()
+		{
+			var testSellOrderRequest = _fixture.Build<SellOrderRequest>()
+				.With(r => r.Quantity, 100001)
+				.Create();
+
+			Func<Task> action = async () => await _stocksService.CreateSellOrder(testSellOrderRequest);
+
+			action.Should().ThrowAsync<ArgumentException>();
+		}
+
+		// When a sellOrderRequest with Price = 0 (specified range 0-10000) passed as parameter to CreateSellOrder, throw ArgumentException.
+		[Fact]
+		public void CreateSellOrder_SellOrderRequest_Price0_ThrowsArgumentException()
+		{
+			var testSellOrderRequest = _fixture.Build<SellOrderRequest>()
+				.With(r => r.Price, 0)
+				.Create();
+
+			Func<Task> action = async () => await _stocksService.CreateSellOrder(testSellOrderRequest);
+
+			action.Should().ThrowAsync<ArgumentException>();
+		}
+
+		// When a sellOrderRequest with Price = 10001 (specified range 0-10000) passed as parameter to CreateSellOrder, throw ArgumentException.
+		[Fact]
+		public void CreateSellOrder_SellOrderRequest_Price10001_ThrowsArgumentException()
+		{
+			var testSellOrderRequest = _fixture.Build<SellOrderRequest>()
+				.With(r => r.Price, 10001)
+				.Create();
+
+			Func<Task> action = async () => await _stocksService.CreateSellOrder(testSellOrderRequest);
+
+			action.Should().ThrowAsync<ArgumentException>();
+		}
+
+		// When a sellOrderRequest with StockSymbol = null passed as parameter to CreateSellOrder, throw ArgumentException.
+		[Fact]
+		public void CreateSellOrder_SellOrderRequest_StockSymbolNull_ThrowsArgumentException()
+		{
+			var testSellOrderRequest = _fixture.Build<SellOrderRequest>()
+				.With(r => r.StockSymbol, null as string)
+				.Create();
+
+			Func<Task> action = async () => await _stocksService.CreateSellOrder(testSellOrderRequest);
+
+			action.Should().ThrowAsync<ArgumentException>();
+		}
+
+		// When a sellOrderRequest with a DateAndTimeOfOrder is before the year 2000, throw ArgumentException.
+		[Fact]
+		public void CreateSellOrder_SellOrderRequest_DateAndTimeOfOrderBeforeYear2000_ThrowsArgumentException()
+		{
+			var testSellOrderRequest = _fixture.Build<SellOrderRequest>()
+				.With(r => r.DateAndTimeOfOrder, DateTime.Parse("31-12-1999"))
+				.Create();
+
+			Func<Task> action = async () => await _stocksService.CreateSellOrder(testSellOrderRequest);
+
+			action.Should().ThrowAsync<ArgumentException>();
+		}
+
+		// When a proper sellOrderRequest is passed as a parameter to CreateSellOrder, returns a sellOrderResponse with a valid GUID and equal properties to the request.
+		[Fact]
+		public async Task CreateSellOrder_ProperSellOrderRequest_ReturnsValidSellOrderResponse()
+		{
+			var testSellOrderRequest = _fixture.Create<SellOrderRequest>();
+
+			var expectedSellOrder = _mapper.Map<SellOrder>(testSellOrderRequest);
+			var expectedSellOrderResponse = _mapper.Map<SellOrderResponse>(expectedSellOrder);
+
+			_mockStocksRepository.Setup
+				(p => p.CreateSellOrder(It.IsAny<SellOrder>()))
+				.ReturnsAsync(expectedSellOrder);
+
+            var outputSellOrderResponse = await _stocksService.CreateSellOrder(testSellOrderRequest);
+
+			outputSellOrderResponse.Should().Be(expectedSellOrderResponse);
+		}
+	}
+	#endregion
 }
-//	#region StocksService.CreateSellOrder()
-//	public class StocksService_CreateSellOrder_UnitTest
-//	{
-//		private readonly IMapper _mapper;
-//		private readonly IStocksService _stocksService;
-
-//		public StocksService_CreateSellOrder_UnitTest()
-//		{
-//			var serviceCollection = new ServiceCollection();
-//			serviceCollection.AddAutoMapper(typeof(DomainModelToPresentationModelProfile));
-//			serviceCollection.AddAutoMapper(typeof(PresentationModelToDomainModelProfile));
-//			var serviceProvider = serviceCollection.BuildServiceProvider();
-//			_mapper = serviceProvider.GetRequiredService<IMapper>();
-
-//			_stocksService = new StocksService(_mapper);
-//		}
-
-//		// When null passed as parameter to CreateSellOrder, throw ArgumentNullException.
-//		[Fact]
-//		public void CreateSellOrder_NullParameter_ThrowsArgumentNullException()
-//		{
-//			Assert.Throws<ArgumentNullException>(() => _stocksService.CreateSellOrder(null));
-//		}
-
-//		// When a sellOrderRequest with Quantity = 0 (specified range 1-100000) passed as paramter to CreateSellOrder, throw ArgumentException.
-//		[Fact]
-//		public void CreateSellOrder_SellOrderRequest_QuantityNull_ThrowsArgumentException()
-//		{
-//			SellOrderRequest testSellOrderRequest = new SellOrderRequest()
-//			{
-//				StockSymbol = "TEST",
-//				StockName = "Test",
-//				DateAndTimeOfOrder = DateTime.Now,
-//				Quantity = 0,
-//				Price = 1
-//			};
-
-//			Assert.Throws<ArgumentException>(() => _stocksService.CreateSellOrder(testSellOrderRequest));
-//		}
-
-//		// When a sellOrderRequest with Quantity = 100001 (specified range 1-100000) passed as parameter to CreateSellOrder, throw ArgumentException.
-//		[Fact]
-//		public void CreateSellOrder_SellOrderRequest_Quantity100001_ThrowsArgumentException()
-//		{
-//			SellOrderRequest testSellOrderRequest = new SellOrderRequest()
-//			{
-//				StockSymbol = "TEST",
-//				StockName = "Test",
-//				DateAndTimeOfOrder = DateTime.Now,
-//				Quantity = 100001,
-//				Price = 1
-//			};
-
-//			Assert.Throws<ArgumentException>(() => _stocksService.CreateSellOrder(testSellOrderRequest));
-//		}
-
-//		// When a sellOrderRequest with Price = 0 (specified range 0-10000) passed as parameter to CreateSellOrder, throw ArgumentException.
-//		[Fact]
-//		public void CreateSellOrder_SellOrderRequest_Price0_ThrowsArgumentException()
-//		{
-//			SellOrderRequest testSellOrderRequest = new SellOrderRequest()
-//			{
-//				StockSymbol = "TEST",
-//				StockName = "Test",
-//				DateAndTimeOfOrder = DateTime.Now,
-//				Quantity = 1,
-//				Price = 0
-//			};
-
-//			Assert.Throws<ArgumentException>(() => _stocksService.CreateSellOrder(testSellOrderRequest));
-//		}
-
-//		// When a sellOrderRequest with Price = 10001 (specified range 0-10000) passed as parameter to CreateSellOrder, throw ArgumentException.
-//		[Fact]
-//		public void CreateSellOrder_SellOrderRequest_Price10001_ThrowsArgumentException()
-//		{
-//			SellOrderRequest testSellOrderRequest = new SellOrderRequest()
-//			{
-//				StockSymbol = "TEST",
-//				StockName = "Test",
-//				DateAndTimeOfOrder = DateTime.Now,
-//				Quantity = 1,
-//				Price = 10001
-//			};
-
-//			Assert.Throws<ArgumentException>(() => _stocksService.CreateSellOrder(testSellOrderRequest));
-//		}
-
-//		// When a sellOrderRequest with StockSymbol = null passed as parameter to CreateSellOrder, throw ArgumentException.
-//		[Fact]
-//		public void CreateSellOrder_SellOrderRequest_StockSymbolNull_ThrowsArgumentException()
-//		{
-//			SellOrderRequest testSellOrderRequest = new SellOrderRequest()
-//			{
-//				StockSymbol = null,
-//				StockName = "Test",
-//				DateAndTimeOfOrder = DateTime.Now,
-//				Quantity = 1,
-//				Price = 1
-//			};
-
-//			Assert.Throws<ArgumentException>(() => _stocksService.CreateSellOrder(testSellOrderRequest));
-//		}
-
-//		// When a sellOrderRequest with a DateAndTimeOfOrder is before the year 2000, throw ArgumentException.
-//		[Fact]
-//		public void CreateSellOrder_SellOrderRequest_DateAndTimeOfOrderBeforeYear2000_ThrowsArgumentException()
-//		{
-//			SellOrderRequest testSellOrderRequest = new SellOrderRequest()
-//			{
-//				StockSymbol = "TEST",
-//				StockName = "Test",
-//				DateAndTimeOfOrder = new DateTime(1999,12,31),
-//				Quantity = 1,
-//				Price = 1
-//			};
-
-//			Assert.Throws<ArgumentException>(() => _stocksService.CreateSellOrder(testSellOrderRequest));
-//		}
-
-//		// When a proper sellOrderRequest is passed as a parameter to CreateBuyOrder, returns a sellOrderResponse with a valid GUID and equal properties to the request.
-//		[Fact]
-//		public void CreateSellOrder_ProperSellOrderRequest_ReturnsValidSellOrderResponse()
-//		{
-//			SellOrderRequest testSellOrderRequest = new SellOrderRequest()
-//			{
-//				StockSymbol = "TEST",
-//				StockName = "Test",
-//				DateAndTimeOfOrder = DateTime.Now,
-//				Quantity = 1,
-//				Price = 1
-//			};
-
-//			SellOrderResponse outputSellOrderResponse = _stocksService.CreateSellOrder(testSellOrderRequest);
-
-//			Assert.True(outputSellOrderResponse.SellOrderID != Guid.Empty &&
-//						outputSellOrderResponse.StockSymbol == testSellOrderRequest.StockSymbol &&
-//						outputSellOrderResponse.StockName == testSellOrderRequest.StockName &&
-//						outputSellOrderResponse.DateAndTimeOfOrder == testSellOrderRequest.DateAndTimeOfOrder &&
-//						outputSellOrderResponse.Quantity == testSellOrderRequest.Quantity &&
-//						outputSellOrderResponse.Price == testSellOrderRequest.Price &&
-//						outputSellOrderResponse.TradeAmount != double.NaN);
-//		}
-//	}
-//	#endregion
-
 //	#region StocksService.GetBuyOrders()
 //	public class StocksService_GetBuyOrders_UnitTest
 //	{
