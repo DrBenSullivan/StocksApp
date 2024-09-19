@@ -37,7 +37,9 @@ namespace StocksApp.Application
             BuyOrder buyOrder = _mapper.Map<BuyOrder>(buyOrderRequest);
             buyOrder.BuyOrderID = Guid.NewGuid();
 
-            return _mapper.Map<BuyOrderResponse>(await _stocksRepository.CreateBuyOrder(buyOrder));
+            BuyOrder returnedBuyOrder = await _stocksRepository.CreateBuyOrder(buyOrder);
+            var response = _mapper.Map<BuyOrderResponse>(returnedBuyOrder);
+            return response;
         }
 
         /// <summary>
