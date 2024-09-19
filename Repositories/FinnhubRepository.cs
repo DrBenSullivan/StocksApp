@@ -32,7 +32,7 @@ namespace StocksApp.Repositories
 
 		public async Task<List<Dictionary<string, string>>?> GetStocks()
 		{
-			string response = await GetJsonResponse($"https://finnhub.io/api/v1/stock/symbol?exchange=US&token=");
+			string response = await GetJsonResponse($"https://finnhub.io/api/v1/stock/symbol?exchange=US");
 			return JsonSerializer.Deserialize<List<Dictionary<string, string>>>(response);
 		}
 

@@ -82,7 +82,7 @@ namespace StocksApp.Application
         /// <summary>
         /// Gets a list of all BuyOrders.
         /// </summary>
-        /// <returns>Returns the list of BuyOrders as a l        ist of BuyOrderResponse DTOs.</returns>
+        /// <returns>Returns the list of BuyOrders as a list of BuyOrderResponse DTOs.</returns>
         public async Task<List<BuyOrderResponse>> GetBuyOrders()
         {
             if (!_ordersDb.BuyOrders.Any()) return [];

@@ -1,0 +1,30 @@
+﻿@model SelectedStockViewModel
+
+<div class="box w-50" style="height: min-content;">
+    <div class="p">
+        <div class="flex" style="align-items: center; flex-flow:nowrap;">
+            <div>
+                <h1 class="mb" style="white-space: nowrap; width: max-content;">
+                    @Model.StockName <span class="text-grey">(@Model.StockSymbol)</span>
+                </h1>
+            </div>
+            <div style="margin-left: auto;">
+                <button type="submit" asp-action="get" asp-controller="Trade" asp-action="Index" asp-route-symbol="@Model.StockSymbol" class="trading-button button-green-back" style="width: 100%">Trade</button>
+            </div>
+        </div>
+
+        <div class="flex" style="align-items:center; flex-flow:nowrap;">
+            <div class="ml" style="white-space: nowrap; width: max-content;">
+                <h1 class="mb"><span class="text-grey">$</span>@Model.Price.ToString()</h1>
+                <h4>Exchange</h4>
+                <p>@Model.Exchange.ToString()</p>
+                <br />
+                <h4>Industry</h4>
+                <p>@Model.Sector.ToString()</p>
+            </div>
+            <div>
+                <img src="@Model.LogoUrl" style="max-width: 100%;">
+            </div>
+        </div>
+    </div>
+</div>

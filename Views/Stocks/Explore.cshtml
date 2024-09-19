@@ -1,8 +1,11 @@
 ﻿@using StocksApp.Domain.Models
 @model StocksExploreViewModel
+@{
+	ViewBag.Title = ViewBag.StockSymbol ?? "All Stocks";
+}
 
-<div class="flex">
-	<div class="box w-50">
+<div class="flex" style="justify-content: space-between;">
+	<div class="box w-40">
 		<div class="flex mt mb" style="justify-content: space-between">
 			<div>
 				<h3 class="text-grey">Stocks</h3>
@@ -25,7 +28,9 @@
 				}
 			</ul>
 		</div>
-	</<div>
-	<div class="w-50">
 	</div>
+	@if (ViewBag.StockSymbol != null)
+	{
+		@await Component.InvokeAsync("SelectedStock", new { stockSymbol = ViewBag.StockSymbol })
+	}
 </div>

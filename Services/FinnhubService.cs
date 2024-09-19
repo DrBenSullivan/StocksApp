@@ -25,7 +25,7 @@ namespace StocksApp.Application
 
         public async Task<Dictionary<string, object>?> GetStockPriceQuote(string stockSymbol)
         {
-            return await _finnhubRepository.GetCompanyProfile(stockSymbol);
+            return await _finnhubRepository.GetStockPriceQuote(stockSymbol);
         }
 
         public async Task<List<Dictionary<string, string>>?> GetStocks()
