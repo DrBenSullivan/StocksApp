@@ -10,6 +10,11 @@ using StocksApp.Repositories.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpLogging(options =>
+{
+    options.LoggingFields = Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.RequestPropertiesAndHeaders | Microsoft.AspNetCore.HttpLogging.HttpLoggingFields.ResponsePropertiesAndHeaders;
+});
+
 Rotativa.AspNetCore.RotativaConfiguration.Setup("wwwroot", wkhtmltopdfRelativePath: "Rotativa");
 
 builder.Services.AddControllersWithViews(options =>
