@@ -7,8 +7,15 @@ using StocksApp.Domain.Models;
 using StocksApp.Persistence;
 using StocksApp.Repositories;
 using StocksApp.Repositories.Interfaces;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Host.UseSerilog((HostBuilderContext context, IServiceProvider services, LoggerConfiguration configuration) =>
+{
+    configuration
+        .ReadFrom.Configuration(context.Configuration)
+        .ReadFrom.Services(services);
+});
 
 builder.Services.AddHttpLogging(options =>
 {
