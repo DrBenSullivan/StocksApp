@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using StocksApp.Application.Interfaces;
 using StocksApp.Domain.Models;
 using StocksApp.Presentation.Models.ViewModels;
@@ -10,12 +11,14 @@ namespace StocksApp.Controllers
         #region private readonly fields
         private readonly IFinnhubService _finnhubService;
         private readonly IConfiguration _configuration;
+        private readonly ILogger<StocksController> _logger;
         #endregion
 
         #region constructor
-        public StocksController(IFinnhubService finnhubService, IConfiguration configuration)
+        public StocksController(IFinnhubService finnhubService, ILogger<StocksController> logger, IConfiguration configuration)
         {
             _finnhubService = finnhubService;
+            _logger = logger;
             _configuration = configuration;
         }
         #endregion
@@ -25,6 +28,7 @@ namespace StocksApp.Controllers
         public async Task<IActionResult> Explore(string? stock)
         {
             ViewBag.StockSymbol = stock ?? null;
+            _logger.LogInformation($"Executing StocksController.Explore({stock ?? string.Empty})");
 
             try
             {
@@ -54,7 +58,7 @@ namespace StocksApp.Controllers
 
             catch (Exception ex)
             {
-                Console.WriteLine(ex.Message);
+                _logger.LogWarning(ex.GetType().Name, ex.Message);
                 return View(null);
             }
         }

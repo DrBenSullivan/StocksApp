@@ -47,6 +47,8 @@ builder.Services.AddDbContext<StockMarketDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
+app.UseSerilogRequestLogging();
+
 app.UseStaticFiles();
 app.UseRouting();
 app.MapControllers();
