@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Serilog;
 using StocksApp.Application.Interfaces;
 using StocksApp.Application;
 using StocksApp.Domain.Mapping;
