@@ -2,7 +2,7 @@
 
 namespace StocksApp.Filters
 {
-    public class BuyOrderAndSellOrderActionFilter : IActionFilter
+    public class BuyOrderAndSellOrderActionFilter : ActionFilterAttribute
     {
         public void OnActionExecuted(ActionExecutedContext context)
         {
