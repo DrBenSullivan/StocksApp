@@ -1,17 +1,17 @@
-﻿using Microsoft.AspNetCore.Mvc.Filters;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace StocksApp.Filters
 {
     public class BuyOrderAndSellOrderActionFilter : ActionFilterAttribute
     {
-        public void OnActionExecuted(ActionExecutedContext context)
-        {
-            throw new NotImplementedException();
-        }
 
-        public void OnActionExecuting(ActionExecutingContext context)
+        public override void OnActionExecuting(ActionExecutingContext context)
         {
-            throw new NotImplementedException();
+            if (!context.ModelState.IsValid)
+                context.Result = new RedirectToRouteResult(
+                    new RouteValueDictionary(new { controller = "Trade", action = "Index" })
+                );
         }
     }
 }
