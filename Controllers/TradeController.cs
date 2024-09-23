@@ -3,6 +3,7 @@ using Microsoft.Extensions.Options;
 using Rotativa.AspNetCore;
 using StocksApp.Application.Interfaces;
 using StocksApp.Domain.Models;
+using StocksApp.Filters;
 using StocksApp.Presentation.Models;
 using StocksApp.Presentation.Models.ViewModels;
 
@@ -65,6 +66,7 @@ namespace StocksApp.Controllers
 
         [HttpPost]
         [Route("/BuyOrder")]
+        [BuyOrderAndSellOrderActionFilter]
         public async Task<IActionResult> BuyOrder(BuyOrderRequest request)
         {
             if (!ModelState.IsValid)
@@ -79,6 +81,7 @@ namespace StocksApp.Controllers
 
         [HttpPost]
         [Route("/SellOrder")]
+        [BuyOrderAndSellOrderActionFilter]
         public async Task<IActionResult> SellOrder(SellOrderRequest request)
         {
             if (!ModelState.IsValid)
