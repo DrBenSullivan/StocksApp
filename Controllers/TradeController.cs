@@ -33,35 +33,27 @@ namespace StocksApp.Controllers
         [Route("Trade")]
         public async Task<IActionResult> Index(string? symbol)
         {
-            try
+            string stockSymbol = symbol is not null
+                ? symbol
+                : _tradingOptions.DefaultStockSymbol
+                ?? throw new Exception("Default Stock Symbol not found in configuration.");
+
+            Dictionary<string, object> stockQuote = await _finnhubService.GetStockPriceQuote(stockSymbol)
+                ?? throw new Exception("Failed to retrieve stockQuote from finnhubService.");
+
+            Dictionary<string, object> companyProfile = await _finnhubService.GetCompanyProfile(stockSymbol)
+                ?? throw new Exception("Failed to retrieve companyProfile from finnhubService.");
+
+            var stockTradeViewModel = new StockTradeViewModel()
             {
-                string stockSymbol = symbol is not null
-                    ? symbol
-                    : _tradingOptions.DefaultStockSymbol
-                    ?? throw new Exception("Default Stock Symbol not found in configuration.");
+                StockSymbol = companyProfile.GetValueOrDefault("ticker")?.ToString() ?? "Unknown",
+                StockName = companyProfile.GetValueOrDefault("name")?.ToString() ?? "Unknown",
+                Price = 0.00,
+                Quantity = 0
+            };
 
-                Dictionary<string, object> stockQuote = await _finnhubService.GetStockPriceQuote(stockSymbol)
-                    ?? throw new Exception("Failed to retrieve stockQuote from finnhubService.");
-
-                Dictionary<string, object> companyProfile = await _finnhubService.GetCompanyProfile(stockSymbol)
-                    ?? throw new Exception("Failed to retrieve companyProfile from finnhubService.");
-
-                var stockTradeViewModel = new StockTradeViewModel()
-                {
-                    StockSymbol = companyProfile.GetValueOrDefault("ticker")?.ToString() ?? "Unknown",
-                    StockName = companyProfile.GetValueOrDefault("name")?.ToString() ?? "Unknown",
-                    Price = 0.00,
-                    Quantity = 0
-                };
-
-                ViewBag.FinnhubAPIKey = _configuration["FinnhubAPIKey"];
-                return View(stockTradeViewModel);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                return View(null);
-            }
+            ViewBag.FinnhubAPIKey = _configuration["FinnhubAPIKey"];
+            return View(stockTradeViewModel);
         }
 
         [HttpPost]
@@ -98,10 +90,18 @@ namespace StocksApp.Controllers
         [Route("/Orders")]
         public async Task<IActionResult> Orders()
         {
-            List<BuyOrderResponse> buyOrders = await _stocksService.GetBuyOrders();
-            List<SellOrderResponse> sellOrders = await _stocksService.GetSellOrders();
-            var viewModel = new OrdersViewModel() { BuyOrders = buyOrders, SellOrders = sellOrders };
-            return View(viewModel);
+            try
+            {
+                List<BuyOrderResponse> buyOrders = await _stocksService.GetBuyOrders();
+                List<SellOrderResponse> sellOrders = await _stocksService.GetSellOrders();
+                var viewModel = new OrdersViewModel() { BuyOrders = buyOrders, SellOrders = sellOrders };
+                return View(viewModel);
+            }
+            catch
+            {
+                throw new Exception("Error getting BuyOrders and SellOrders from database");
+            }
+            
         }
 
         [HttpGet]

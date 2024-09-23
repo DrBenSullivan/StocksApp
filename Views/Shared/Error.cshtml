@@ -1,2 +1,9 @@
-﻿<h2>An Error Occurred</h2>
-<p>@ViewBag.Error.Message</p>
+﻿@{
+	ViewBag.Title = "ERROR";
+}
+<div class="text-center">
+	<h1 class="text-red">ERROR</h1>
+	<p>@ViewBag.ErrorMessage</p>
+
+	<img src="~/error.svg" width="500px" style="margin-top: 100px" />
+</div>

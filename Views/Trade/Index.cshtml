@@ -1,6 +1,6 @@
 ﻿@model StockTradeViewModel
 @{
-	ViewBag.Title = Model.StockName;
+	ViewBag.Title = Model.StockName ?? "Index";
 	var sellActionUrl = Url.Action("SellOrder", "Trade");
 	var buyActionUrl = Url.Action("BuyOrder", "Trade");
 }

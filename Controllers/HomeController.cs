@@ -5,7 +5,7 @@ namespace StocksApp.Controllers
 {
 	public class HomeController : Controller
 	{
-		[Route("/Error")]
+		[Route("Error")]
 		public IActionResult Error()
 		{
 			IExceptionHandlerFeature? feature = HttpContext.Features.Get<IExceptionHandlerFeature>();
