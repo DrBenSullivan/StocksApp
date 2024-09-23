@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 
 namespace StocksApp.Filters
 {
-    public class BuyOrderAndSellOrderActionFilter : IActionFilter
+    public class BuyOrderAndSellOrderActionFilter : ActionFilterAttribute
     {
 
         public override void OnActionExecuting(ActionExecutingContext context)
